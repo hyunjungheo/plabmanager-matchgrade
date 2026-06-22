@@ -69,6 +69,8 @@ body{background:var(--page);font-family:Pretendard,-apple-system,BlinkMacSystemF
 .lname{font-size:15px;font-weight:700;color:#191A1C;margin:0 0 3px}
 .ldesc{font-size:13px;color:var(--sub);line-height:1.5;margin:0}
 .sheet-cta{width:100%;background:#191A1C;color:#fff;border:0;border-radius:14px;padding:16px;font-size:16px;font-weight:700;cursor:pointer}
+.no-show-label{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--sub);margin-bottom:12px;cursor:pointer;user-select:none}
+.no-show-label input{width:16px;height:16px;accent-color:#191A1C;cursor:pointer;flex:none}
 .sortopts{margin-top:6px}
 .sopt{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:15px 2px;font-size:15.5px;color:#191A1C;cursor:pointer;border-top:1px solid #F1F3F5}
 .sopt:first-child{border-top:0}
@@ -172,6 +174,7 @@ td{color:#54585E} td.v{font-weight:600;color:#191A1C}
         <div class="lrow"><span class="lmark"><span class="lbl-n">N</span></span><div><p class="lname">신규</p><p class="ldesc">최근에 새로 열린 매치예요.</p></div></div>
         <div class="lrow"><span class="lmark"><span class="lbl-cf">확정</span></span><div><p class="lname">확정</p><p class="ldesc">최소 인원이 모여 진행이 확정된 매치예요.</p></div></div>
       </div>
+      <label class="no-show-label"><input type="checkbox" id="noShowChk"> 다시 보지 않기</label>
       <button class="sheet-cta" data-close>확인했어요</button>
     </div>
   </div>
@@ -389,10 +392,20 @@ document.addEventListener('click',function(e){
 var likelyOn=false;
 document.getElementById('f-likely').addEventListener('click',function(){likelyOn=!likelyOn;this.classList.toggle('act',likelyOn);renderList(likelyOn);});
 var lblM=document.getElementById('lblModal');
-document.getElementById('openLblModal').addEventListener('click',function(){lblM.classList.add('open');});
-lblM.addEventListener('click',function(e){if(e.target===lblM||e.target.closest('[data-close]'))lblM.classList.remove('open');});
-(function(){var KEY='plab_lblguide_seen_v1';var seen=false;try{seen=!!localStorage.getItem(KEY);}catch(e){}
-  if(!seen){setTimeout(function(){lblM.classList.add('open');},550);try{localStorage.setItem(KEY,'1');}catch(e){}}})();
+var LBL_KEY='plab_lblguide_noshow_v2';
+function closeLblModal(){
+  var chk=document.getElementById('noShowChk');
+  if(chk&&chk.checked){try{localStorage.setItem(LBL_KEY,'1');}catch(e){}}
+  lblM.classList.remove('open');
+}
+document.getElementById('openLblModal').addEventListener('click',function(){
+  var chk=document.getElementById('noShowChk');
+  if(chk) chk.checked=false;
+  lblM.classList.add('open');
+});
+lblM.addEventListener('click',function(e){if(e.target===lblM||e.target.closest('[data-close]'))closeLblModal();});
+(function(){var hide=false;try{hide=!!localStorage.getItem(LBL_KEY);}catch(e){}
+  if(!hide){lblM.classList.add('open');}})();
 
 document.querySelectorAll('[data-icon]').forEach(function(el){el.insertAdjacentHTML('afterbegin',svg(el.dataset.icon, +el.dataset.sz||20, el.dataset.color||'currentColor'));});
 renderList(false);
