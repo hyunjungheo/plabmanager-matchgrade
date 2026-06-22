@@ -152,8 +152,7 @@ td{color:#54585E} td.v{font-weight:600;color:#191A1C}
     <div class="notice"><span class="tag">공지</span><span class="txt">2026 월드컵 매치 진행 이벤트 안내</span><span class="cv" data-icon="chevR" data-sz="18" data-color="#A0A6AC"></span></div>
     <div class="filters">
       <div class="chip vest"><span data-icon="vest" data-sz="18" data-color="#A0A6AC"></span></div>
-      <div class="chip sortchip" id="sortChip">정렬 <span style="display:flex" data-icon="chevD" data-sz="15" data-color="#A0A6AC"></span></div>
-      <div class="chip on">서울 <span style="display:flex" data-icon="chevD" data-sz="15" data-color="#2C6FF0"></span></div>
+<div class="chip on">서울 <span style="display:flex" data-icon="chevD" data-sz="15" data-color="#2C6FF0"></span></div>
       <div class="chip likely" id="f-likely">진행 유력 <span style="display:flex"><svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M8.93569 21L3 15.0643L3.84796 14.2164L9.78364 20.152L8.93569 21Z" fill="#FF894A"/><path d="M10.6316 19.3041L4.69591 13.3684L7.23978 10.8245L13.1755 16.7602L10.6316 19.3041Z" fill="#FF894A"/><path d="M21 16.9532L16.9913 12.9444L14.0234 15.9123L8.08773 9.97658L11.0556 7.00874L7.04683 3H21V16.9532Z" fill="#FF894A"/></svg></span></div>
       <div class="chip">혜택 <span style="display:flex" data-icon="chevD" data-sz="15" data-color="#A0A6AC"></span></div>
       <div class="chip">요일 <span style="display:flex" data-icon="chevD" data-sz="15" data-color="#A0A6AC"></span></div>
@@ -176,17 +175,7 @@ td{color:#54585E} td.v{font-weight:600;color:#191A1C}
       <button class="sheet-cta" data-close>확인했어요</button>
     </div>
   </div>
-  <div class="ovl" id="sortModal">
-    <div class="sheet">
-      <div class="sheet-hd"><span class="sheet-t">정렬</span><button class="sheet-x" data-close><span style="display:flex" data-icon="close" data-sz="22" data-color="#191A1C"></span></button></div>
-      <div class="sortopts">
-        <div class="sopt sel" data-sort="default"><span>기본</span><span class="schk" data-icon="check" data-sz="20" data-color="#2C6FF0"></span></div>
-        <div class="sopt" data-sort="soon"><span>시작 임박 · 긴급양도/프로모션</span><span class="schk" data-icon="check" data-sz="20" data-color="#2C6FF0"></span></div>
-        <div class="sopt" data-sort="confirmed"><span>확정 매치</span><span class="schk" data-icon="check" data-sz="20" data-color="#2C6FF0"></span></div>
-        <div class="sopt" data-sort="badged"><span>배지 있는 매치</span><span class="schk" data-icon="check" data-sz="20" data-color="#2C6FF0"></span></div>
-      </div>
-    </div>
-  </div>
+
 </div>
 
 <div id="tableWrap">
@@ -304,15 +293,7 @@ function priorityTier(m){
   return 3;                                           /* 그 외 */
 }
 function timeMin(t){var p=t.split(':');return (+p[0])*60+(+(p[1]||0));}
-var sortMode='default';
-var sortPred={
-  soon:function(m){var r=resolve(m);return !!m.price||(r&&r.status==='urgent');},
-  confirmed:function(m){var r=resolve(m);return r&&r.status==='confirm';},
-  badged:function(m){var r=resolve(m);return (r&&(r.status==='likely'||r.status==='new'||r.status==='confirm'))||!!m.price||!!m.my;}
-};
-var sortLabel={soon:'시작 임박 · 긴급양도/프로모션',confirmed:'확정 매치',badged:'배지 있는 매치'};
 function renderList(onlyLikely){
-  if(sortMode!=='default') return renderSorted();
   var days=[]; matches.forEach(function(m){if(days.indexOf(m.day)<0)days.push(m.day);});
   var html='';
   days.forEach(function(d){
@@ -323,13 +304,6 @@ function renderList(onlyLikely){
     html+='<div class="daygrp"><div class="dayhd '+dayClass(d)+'">'+d+'</div><div class="row">'+grp.map(cardHTML).join('')+'</div></div>';
   });
   document.getElementById('listBody').innerHTML=html||'<div style="padding:40px 16px;color:var(--mute);font-size:14px;text-align:center">진행 유력 매치가 없어요.</div>';
-}
-function renderSorted(){
-  var days=[]; matches.forEach(function(m){if(days.indexOf(m.day)<0)days.push(m.day);});
-  var list=matches.filter(sortPred[sortMode]);
-  list.sort(function(a,b){var da=days.indexOf(a.day)-days.indexOf(b.day);if(da)return da;return (parseInt(a.time)||0)-(parseInt(b.time)||0);});
-  var body=list.length?('<div class="row">'+list.map(cardHTML).join('')+'</div>'):'<div style="padding:40px 16px;color:var(--mute);font-size:14px;text-align:center">해당 매치가 없어요.</div>';
-  document.getElementById('listBody').innerHTML='<div class="daygrp"><div class="dayhd">'+sortLabel[sortMode]+' · '+list.length+'건</div>'+body+'</div>';
 }
 
 function sec(icon,color,title,body,opts){
@@ -419,17 +393,6 @@ document.getElementById('openLblModal').addEventListener('click',function(){lblM
 lblM.addEventListener('click',function(e){if(e.target===lblM||e.target.closest('[data-close]'))lblM.classList.remove('open');});
 (function(){var KEY='plab_lblguide_seen_v1';var seen=false;try{seen=!!localStorage.getItem(KEY);}catch(e){}
   if(!seen){setTimeout(function(){lblM.classList.add('open');},550);try{localStorage.setItem(KEY,'1');}catch(e){}}})();
-var sortM=document.getElementById('sortModal');
-document.getElementById('sortChip').addEventListener('click',function(){sortM.classList.add('open');});
-sortM.addEventListener('click',function(e){
-  if(e.target===sortM||e.target.closest('[data-close]')){sortM.classList.remove('open');return;}
-  var o=e.target.closest('.sopt'); if(!o)return;
-  sortMode=o.dataset.sort;
-  Array.prototype.forEach.call(sortM.querySelectorAll('.sopt'),function(x){x.classList.toggle('sel',x===o);});
-  document.getElementById('sortChip').classList.toggle('act',sortMode!=='default');
-  renderList(typeof likelyOn!=='undefined'&&likelyOn);
-  sortM.classList.remove('open');
-});
 
 document.querySelectorAll('[data-icon]').forEach(function(el){el.insertAdjacentHTML('afterbegin',svg(el.dataset.icon, +el.dataset.sz||20, el.dataset.color||'currentColor'));});
 renderList(false);
