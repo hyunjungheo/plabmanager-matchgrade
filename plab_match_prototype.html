@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PLAB Manager — 매치 선택/상세 프로토타입</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --app:#FFFFFF; --page:#E9ECEF; --text:#191A1C; --sub:#6B7178; --mute:#A0A6AC;
+  --bd:#E5E8EB; --bd-on:#A8C7F5; --dv:#F2F4F6; --detail-bg:#F1F3F5;
+  --head:#16181D; --blue:#2C6FF0; --red:#E5392E; --sec-bd:#ECEEF0; --confirm:#1A5FE0;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{background:var(--page);font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;color:var(--text);display:flex;flex-direction:column;align-items:center;min-height:100vh}
+#device{width:100%;max-width:430px;background:var(--app);min-height:100vh;position:relative;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.04)}
+.scroll{height:100vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.statusbar{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:var(--head);color:#fff;font-size:15px;font-weight:600}
+.statusbar .rt{display:flex;align-items:center;gap:7px;font-size:13px}
+.batt{display:inline-flex;align-items:center;gap:3px;background:#2BC972;color:#063d1f;font-size:11px;font-weight:700;padding:1px 5px;border-radius:4px}
+.appbar{background:var(--head);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:14px 18px 18px}
+.logo{font-style:italic;font-weight:800;font-size:20px;letter-spacing:-.5px}
+.logo span{font-weight:500;opacity:.92}
+.appbar .ic{display:flex;gap:18px;color:#fff}
+.appbar .ic span{position:relative;display:flex}
+.dot{position:absolute;top:-1px;right:-1px;width:7px;height:7px;border-radius:50%;background:#FF4D4F}
+.notice{display:flex;align-items:center;gap:10px;margin:14px 16px 4px;padding:14px;border:1px solid var(--bd);border-radius:12px}
+.notice .tag{background:#23262C;color:#fff;font-size:11px;font-weight:700;padding:3px 7px;border-radius:6px;flex:none}
+.notice .txt{font-size:14px;font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.notice .cv{color:var(--mute);display:flex}
+.filters{display:flex;gap:8px;overflow-x:auto;padding:14px 16px 6px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.chip{flex:none;display:inline-flex;align-items:center;gap:5px;border:1.5px solid var(--bd);border-radius:999px;padding:9px 15px;font-size:14px;font-weight:600;color:#3A3E44;background:#fff;cursor:pointer}
+.chip.vest{padding:9px 12px;color:var(--mute)}
+.chip.on{border-color:var(--blue);color:var(--blue)}
+.chip.likely.act{border-color:#F36F21;color:#EA6A1E}
+.daygrp{padding:18px 0 4px}
+.dayhd{font-size:18px;font-weight:700;padding:0 16px 12px}
+.dayhd.sat{color:var(--blue)} .dayhd.sun{color:var(--red)}
+.row{display:flex;gap:10px;overflow-x:auto;padding:0 16px 4px;scrollbar-width:none}
+.row::-webkit-scrollbar{display:none}
+.mcard{flex:none;width:158px;background:#fff;border:1px solid var(--bd);border-radius:12px;padding:12px 12px;cursor:pointer;transition:transform .05s;position:relative;overflow:hidden}
+.mcard.on{border-color:var(--bd-on)}
+.mcard:active{transform:scale(.985);background:#FAFBFC}
+.mtop{display:flex;align-items:center;justify-content:space-between;gap:4px;min-height:20px}
+.mchips{display:flex;align-items:center;gap:4px;flex:none}
+.mtime{font-size:18px;font-weight:700;letter-spacing:-.3px}
+.mvenue{font-size:14.5px;font-weight:600;margin:5px 0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mcourt{font-size:12.5px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mfmtrow{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:2px}
+.mfmt{font-size:12px;color:var(--mute);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sdot{width:7px;height:7px;border-radius:50%;flex:none}
+.lbl-n{flex:none;display:inline-flex;align-items:center;justify-content:center;min-width:17px;font-size:10px;font-weight:800;color:#97500F;background:#FFE875;padding:3px 5px;border-radius:5px;line-height:1}
+.lbl-cf{flex:none;display:inline-flex;align-items:center;font-size:10px;font-weight:800;color:#1B5FD9;background:#E1EAFF;padding:3px 6px;border-radius:5px;line-height:1}
+.lblguide{display:inline-flex;align-items:center;gap:4px;margin:0 16px 10px;font-size:12.5px;color:var(--sub);cursor:pointer}
+.ovl{position:absolute;inset:0;background:rgba(17,18,20,.5);display:flex;align-items:flex-end;justify-content:center;z-index:60;visibility:hidden;opacity:0;transition:opacity .2s}
+.ovl.open{visibility:visible;opacity:1}
+.sheet{width:100%;background:#fff;border-radius:22px 22px 0 0;padding:26px 22px 20px;box-shadow:0 -8px 30px rgba(0,0,0,.12);transform:translateY(100%);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.ovl.open .sheet{transform:translateY(0)}
+.sheet-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.sheet-t{font-size:21px;font-weight:800;letter-spacing:-.3px;color:#191A1C}
+.sheet-x{background:none;border:0;padding:2px;cursor:pointer;line-height:0}
+.sheet-sub{margin-top:9px;font-size:13.5px;color:var(--sub);line-height:1.5}
+.sheet-bd{margin:18px 0 22px}
+.lrow{display:flex;align-items:flex-start;gap:13px;padding:13px 0;border-top:1px solid #F1F3F5}
+.lrow:first-child{border-top:0}
+.lmark{flex:none;width:46px;display:flex;align-items:center;justify-content:center;padding-top:1px}
+.lname{font-size:15px;font-weight:700;color:#191A1C;margin:0 0 3px}
+.ldesc{font-size:13px;color:var(--sub);line-height:1.5;margin:0}
+.sheet-cta{width:100%;background:#191A1C;color:#fff;border:0;border-radius:14px;padding:16px;font-size:16px;font-weight:700;cursor:pointer}
+.sortopts{margin-top:6px}
+.sopt{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:15px 2px;font-size:15.5px;color:#191A1C;cursor:pointer;border-top:1px solid #F1F3F5}
+.sopt:first-child{border-top:0}
+.sopt .schk{display:none}
+.sopt.sel{font-weight:700;color:var(--blue)}
+.sopt.sel .schk{display:flex}
+.chip.sortchip.act{border-color:var(--blue);color:var(--blue)}
+.mbadges{display:flex;align-items:center;gap:4px;flex:none}
+.ichip{width:21px;height:21px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+
+.ribbon{position:absolute;bottom:14px;right:-32px;transform:rotate(-45deg);background:#E1EAFF;color:#1B5FD9;font-size:11px;font-weight:700;letter-spacing:2px;text-indent:2px;padding:4px 36px;z-index:1}
+.bdg{display:inline-flex;align-items:center;flex:none;padding:3px 7px;border-radius:6px;font-size:11px;font-weight:800;line-height:1;letter-spacing:-.2px;white-space:nowrap}
+.b-ls{background:#0B8043;color:#fff} .b-lf{background:#E7F5EE;color:#138A50}
+.b-cf{background:#E1EAFF;color:#1B5FD9} .b-nw{background:#FFE875;color:#97500F}
+.b-ug{background:#FDECEC;color:#E5392E} .b-pr{background:#EFF1F3;color:#6B7178}
+.b-my{background:#23262C;color:#fff} .b-ld{background:#E8F1FF;color:#2563EB} .b-sub{background:#FFF2E0;color:#C77A12}
+.promo{position:sticky;bottom:0;display:flex;align-items:center;gap:10px;margin:10px 12px 14px;padding:15px 16px;background:#fff;border:1px solid var(--bd);border-radius:14px;box-shadow:0 -2px 14px rgba(0,0,0,.05)}
+.promo .tk{color:var(--blue);display:flex} .promo .pt{flex:1;font-size:15px;font-weight:700} .promo .cv{color:var(--mute);display:flex}
+
+#detailView{display:none;background:var(--detail-bg)}
+.dbar{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px;background:#fff;padding:13px 14px;border-bottom:1px solid var(--dv)}
+.dbar button{background:none;border:none;padding:0;display:flex;color:var(--text);cursor:pointer}
+.dbar .dt{font-size:17px;font-weight:700;flex:1;text-align:center;margin-right:24px}
+.hero{height:160px;background:#E7EAEE;display:flex;align-items:center;justify-content:center;color:#B6BCC3;position:relative;overflow:hidden}
+.heroRibbon{position:absolute;top:18px;right:-42px;transform:rotate(45deg);background:#E1EAFF;color:#1B5FD9;font-size:13px;font-weight:700;letter-spacing:2px;text-indent:2px;padding:6px 50px}
+.dhead{background:#fff;padding:16px 18px 20px;border-bottom:8px solid var(--detail-bg)}
+.minitags{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.mt{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:700}
+.dtdate{font-size:14px;color:var(--sub);margin:0 0 4px}
+.dtitle{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.dtitle .nm{font-size:21px;font-weight:800;letter-spacing:-.4px}
+.daddr{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--sub);margin:11px 0 0;flex-wrap:wrap}
+.achip{display:inline-flex;align-items:center;gap:3px;border:1px solid var(--bd);border-radius:7px;padding:3px 8px;font-size:12px;color:#4A4F56}
+.dline{font-size:14px;color:#4A4F56;margin:9px 0 0}
+.dprice{font-size:21px;font-weight:800;margin:18px 0 16px}
+.dprice .add{color:var(--blue)} .dprice .dur{font-size:14px;color:var(--mute);font-weight:600}
+.dcta{display:block;width:100%;padding:17px;border:none;border-radius:13px;background:#26282E;color:#fff;font-size:16px;font-weight:700;cursor:pointer}
+.sec{background:#fff;padding:18px;border-bottom:8px solid var(--detail-bg)}
+.sechd{display:flex;align-items:center;gap:9px;margin-bottom:13px}
+.sechd .ci{flex:none;display:flex}
+.sechd .ct{font-size:16px;font-weight:800}
+.secbody{font-size:14px;color:#54585E;line-height:1.62}
+.secbody ul{margin:0;padding-left:6px;list-style:none}
+.secbody li{position:relative;padding-left:14px;margin:5px 0}
+.secbody li:before{content:"·";position:absolute;left:3px;color:#9AA0A6}
+.secbody .grp{font-weight:700;color:#191A1C;margin:12px 0 4px}
+.secbtn{display:block;width:100%;margin-top:15px;padding:15px;border:1px solid var(--bd);border-radius:12px;background:#fff;font-size:15px;font-weight:600;color:#3A3E44;cursor:pointer;text-align:center}
+.seclink{display:inline-block;margin-top:9px;font-size:14px;font-weight:700;color:#191A1C;text-decoration:underline;text-underline-offset:3px}
+.likeco{width:30px;height:30px;border-radius:50%;background:#15B66B;color:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.sec.likely{display:flex;gap:12px;align-items:flex-start}
+.sec.likely .lk-t{font-size:16px;font-weight:800;margin:0 0 4px} .sec.likely .lk-b{font-size:14px;color:var(--sub);margin:0;line-height:1.5}
+.newmark{flex:none;width:26px;height:26px;border-radius:7px;background:#FFE875;color:#97500F;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.plate{display:flex;gap:10px;margin-top:14px}
+.plate .lb{font-size:13px;color:var(--sub);margin-bottom:7px}
+.plate input{width:100%;padding:14px;border:1px solid var(--bd);border-radius:11px;font-size:15px;font-weight:600;color:#191A1C;background:#fff}
+.plate .reg{flex:none;padding:0 22px;border:none;border-radius:11px;background:#26282E;color:#fff;font-size:15px;font-weight:700;cursor:pointer}
+.dbottom{display:flex;justify-content:flex-end;padding:18px;background:var(--detail-bg)}
+.dbottom a{font-size:14px;color:var(--mute);font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:3px}
+.demo{font-size:11px;color:#B6BCC3;text-align:center;padding:6px 16px 36px;background:var(--detail-bg)}
+#tableWrap{width:100%;max-width:1040px;padding:28px 16px 70px}
+#tableWrap h3{font-size:16px;font-weight:800;margin:0 0 4px}
+#tableWrap p.cap{font-size:13px;color:#6B7178;margin:0 0 14px}
+.tscroll{overflow-x:auto;border:1px solid #E1E4E8;border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:900px;font-size:13px;background:#fff}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid #EEF0F2;white-space:nowrap}
+th{background:#F7F8FA;font-weight:700;color:#3A3E44;position:sticky;top:0}
+td{color:#54585E} td.v{font-weight:600;color:#191A1C}
+.tg{display:inline-block;font-size:11px;font-weight:600;padding:2px 7px;border-radius:5px;background:#F1F3F5;color:#5A6068;margin:1px 2px 1px 0}
+.fb{display:inline-block;font-size:11px;font-weight:800;padding:2px 7px;border-radius:5px}
+.pos{color:#9AA0A6;font-weight:600;font-size:11px;margin-left:4px}
+</style>
+</head>
+<body>
+<div id="device">
+  <div id="listView" class="scroll">
+    <div class="statusbar"><span>4:01</span><span class="rt"><span style="display:flex" data-icon="signal" data-sz="16"></span>LTE<span class="batt">50<span data-icon="bolt" data-sz="11"></span></span></span></div>
+    <div class="appbar">
+      <div class="logo">plab<span>/manager</span></div>
+      <div class="ic"><span data-icon="search" data-sz="23"></span><span data-icon="calendar" data-sz="23"></span><span data-icon="bell" data-sz="23"><span class="dot"></span></span><span data-icon="user" data-sz="23"></span></div>
+    </div>
+    <div class="notice"><span class="tag">공지</span><span class="txt">2026 월드컵 매치 진행 이벤트 안내</span><span class="cv" data-icon="chevR" data-sz="18" data-color="#A0A6AC"></span></div>
+    <div class="filters">
+      <div class="chip vest"><span data-icon="vest" data-sz="18" data-color="#A0A6AC"></span></div>
+      <div class="chip sortchip" id="sortChip">정렬 <span style="display:flex" data-icon="chevD" data-sz="15" data-color="#A0A6AC"></span></div>
+      <div class="chip on">서울 <span style="display:flex" data-icon="chevD" data-sz="15" data-color="#2C6FF0"></span></div>
+      <div class="chip likely" id="f-likely">진행 유력 <span style="display:flex"><svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M8.93569 21L3 15.0643L3.84796 14.2164L9.78364 20.152L8.93569 21Z" fill="#FF894A"/><path d="M10.6316 19.3041L4.69591 13.3684L7.23978 10.8245L13.1755 16.7602L10.6316 19.3041Z" fill="#FF894A"/><path d="M21 16.9532L16.9913 12.9444L14.0234 15.9123L8.08773 9.97658L11.0556 7.00874L7.04683 3H21V16.9532Z" fill="#FF894A"/></svg></span></div>
+      <div class="chip">혜택 <span style="display:flex" data-icon="chevD" data-sz="15" data-color="#A0A6AC"></span></div>
+      <div class="chip">요일 <span style="display:flex" data-icon="chevD" data-sz="15" data-color="#A0A6AC"></span></div>
+      <div class="chip">시간 <span style="display:flex" data-icon="chevD" data-sz="15" data-color="#A0A6AC"></span></div>
+    </div>
+    <div class="lblguide" id="openLblModal">매치 상태 표시 안내 <span style="display:flex" data-icon="info" data-sz="15" data-color="#A0A6AC"></span></div>
+    <div id="listBody"></div>
+    <div class="promo"><span class="tk" data-icon="ticket" data-sz="20"></span><span class="pt">5매치 이상 진행하고 플랩 이용권 받아요</span><span class="cv" data-icon="chevU" data-sz="18" data-color="#A0A6AC"></span></div>
+  </div>
+  <div id="detailView" class="scroll"></div>
+  <div class="ovl" id="lblModal">
+    <div class="sheet">
+      <div class="sheet-hd"><span class="sheet-t">매치 상태 표시 안내</span><button class="sheet-x" data-close><span style="display:flex" data-icon="close" data-sz="22" data-color="#191A1C"></span></button></div>
+      <p class="sheet-sub">매치 카드 오른쪽에 표시되는 마크의 의미예요.</p>
+      <div class="sheet-bd">
+        <div class="lrow"><span class="lmark"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" style="display:block"><path d="M8.93569 21L3 15.0643L3.84796 14.2164L9.78364 20.152L8.93569 21Z" fill="#FF894A"/><path d="M10.6316 19.3041L4.69591 13.3684L7.23978 10.8245L13.1755 16.7602L10.6316 19.3041Z" fill="#FF894A"/><path d="M21 16.9532L16.9913 12.9444L14.0234 15.9123L8.08773 9.97658L11.0556 7.00874L7.04683 3H21V16.9532Z" fill="#FF894A"/></svg></span><div><p class="lname">진행 유력</p><p class="ldesc">최근 5주 동안 진행이 많이 된 매치예요. 진행 가능성이 높을수록 화살표 꼬리선이 많아져요.</p></div></div>
+        <div class="lrow"><span class="lmark"><span class="lbl-n">N</span></span><div><p class="lname">신규</p><p class="ldesc">최근에 새로 열린 매치예요.</p></div></div>
+        <div class="lrow"><span class="lmark"><span class="lbl-cf">확정</span></span><div><p class="lname">확정</p><p class="ldesc">최소 인원이 모여 진행이 확정된 매치예요.</p></div></div>
+      </div>
+      <button class="sheet-cta" data-close>확인했어요</button>
+    </div>
+  </div>
+  <div class="ovl" id="sortModal">
+    <div class="sheet">
+      <div class="sheet-hd"><span class="sheet-t">정렬</span><button class="sheet-x" data-close><span style="display:flex" data-icon="close" data-sz="22" data-color="#191A1C"></span></button></div>
+      <div class="sortopts">
+        <div class="sopt sel" data-sort="default"><span>기본</span><span class="schk" data-icon="check" data-sz="20" data-color="#2C6FF0"></span></div>
+        <div class="sopt" data-sort="soon"><span>시작 임박 · 긴급양도/프로모션</span><span class="schk" data-icon="check" data-sz="20" data-color="#2C6FF0"></span></div>
+        <div class="sopt" data-sort="confirmed"><span>확정 매치</span><span class="schk" data-icon="check" data-sz="20" data-color="#2C6FF0"></span></div>
+        <div class="sopt" data-sort="badged"><span>배지 있는 매치</span><span class="schk" data-icon="check" data-sz="20" data-color="#2C6FF0"></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tableWrap">
+  <h3>매치 목업 데이터</h3>
+  <p class="cap">UI에 반영된 30건의 목업 매치와 속성, resolveStatus 결과 배지(노출 위치)입니다. 가격·긴급양도·MY=시간 줄(고정), 진행 유력=포맷 줄 우측 주황 화살표(기존 앱 표시 그대로), 신규=N 라벨, 확정=라이트블루 칩(상세는 일반 배지), MY 노출 시 다른 배지(확정 포함) 모두 숨김.</p>
+  <div class="tscroll"><table id="dataTable"></table></div>
+</div>
+
+<script>
+var ICON={
+  search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
+  calendar:'<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 9h16M8 3v4M16 3v4"/>',
+  bell:'<path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3l2 2H4l2-2v-3a7 7 0 0 1 4-6"/><path d="M9.5 18a2.5 2.5 0 0 0 5 0"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  chevR:'<path d="M9 6l6 6l-6 6"/>', chevD:'<path d="M6 9l6 6l6-6"/>', chevU:'<path d="M6 15l6-6l6 6"/>', chevL:'<path d="M15 6l-6 6l6 6"/>',
+  arrowUR:'<path d="M7 17L17 7M9 7h8v8"/>',
+  vest:'<path d="M9 4l3 2.5L15 4l4 3v13H5V7z"/>',
+  ticket:'<path d="M4 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2a2 2 0 0 0 0 4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2a2 2 0 0 0 0-4z"/>',
+  signal:'<path d="M4 18v-2M9 18v-5M14 18v-8M19 18V8" stroke-width="2.2"/>',
+  bolt:'<path fill="currentColor" stroke="none" d="M13 2L4 14h6l-1 8l9-12h-6l1-8z"/>',
+  refresh:'<path d="M5 9a7 7 0 0 1 12-3l2 2M19 15a7 7 0 0 1-12 3l-2-2"/><path d="M19 4v4h-4M5 20v-4h4"/>',
+  mcircle:'<circle cx="12" cy="12" r="9"/><path d="M8 16V9l4 4l4-4v7"/>',
+  alert:'<circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+  close:'<path d="M6 6l12 12M18 6L6 18"/>',
+  tag:'<path d="M4 4h7l9 9l-7 7l-9-9z"/><circle cx="8" cy="8" r="1.3"/>',
+  car:'<path d="M5 11l1.5-4h11L19 11M4 11h16v5H4z"/><circle cx="7.5" cy="16" r="1.5"/><circle cx="16.5" cy="16" r="1.5"/>',
+  wash:'<rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M8 6h.01M11 6h.01"/>',
+  pin:'<path d="M12 21s-6-5.7-6-10a6 6 0 0 1 12 0c0 4.3-6 10-6 10z"/><circle cx="12" cy="11" r="2"/>',
+  mood:'<circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M9 15h6"/>',
+  plant:'<path d="M12 21V11M12 11C12 8 9 6 5 6c0 4 3 6 7 5M12 13c0-3 3-5 7-5c0 4-3 6-7 5"/>',
+  target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4"/>',
+  check:'<path d="M5 12l4.5 4.5L19 7" stroke-width="2.2"/>',
+  sparkle:'<path fill="currentColor" stroke="none" d="M12 2l2 8 8 2-8 2-2 8-2-8-8-2 8-2z"/>',
+  copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
+  map:'<path d="M9 5L3 7v12l6-2l6 2l6-2V5l-6 2l-6-2z"/><path d="M9 5v12M15 7v12"/>'
+};
+function svg(n,s,c){s=s||20;c=c||'currentColor';return '<svg viewBox="0 0 24 24" width="'+s+'" height="'+s+'" fill="none" stroke="'+c+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle">'+(ICON[n]||'')+'</svg>';}
+
+var STYLE={
+  likelyStrong:{cls:'b-ls',label:'진행 유력'}, likelySoft:{cls:'b-lf',label:'진행 유력'},
+  confirm:{cls:'b-cf',label:'확정'}, new:{cls:'b-nw',label:'신규'}, urgent:{cls:'b-ug',label:'긴급양도'}
+};
+var matches=[
+ {id:1, day:'6월 17일 수요일', time:'19:00', venue:'용산 더베이스', court:'7구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'8/18명', base:25000, dur:'2시간', addr:'서울 용산구 한강대로 100', grade:'S', prob:0.88, price:5000, laundry:true, parking:true},
+ {id:2, day:'6월 17일 수요일', time:'20:00', venue:'노원 하라', court:'A구장', fmt:'6vs6', gender:'남자', level:'비기너', cap:'4/18명', base:22000, dur:'2시간', addr:'서울 노원구 동일로 1400', grade:'A2', prob:0.76, price:5000, ai:true},
+ {id:3, day:'6월 17일 수요일', time:'21:00', venue:'송파 천마', court:'4구장', fmt:'6vs6', gender:'남녀모두', level:'모든 레벨', cap:'2/18명', base:18000, dur:'2시간', addr:'서울 송파구 충민로 66', grade:'-', prob:null, isNew:true, price:5000, compact:true},
+ {id:4, day:'6월 17일 수요일', time:'22:00', venue:'강남 매치업', court:'B구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'5/18명', base:24000, dur:'2시간', addr:'서울 강남구 테헤란로 300', grade:'A1', prob:0.83, urgent:true, price:5000},
+ {id:5, day:'6월 18일 목요일', time:'9:00', venue:'영등포 더에프', court:'A구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'18/18명', base:24000, dur:'2시간', addr:'서울 영등포구 양산로 50', grade:'S', prob:0.90, confirmed:true, price:5000, league:true},
+ {id:6, day:'6월 18일 목요일', time:'17:00', venue:'용산 더베이스', court:'1구장 (레알)', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'14/18명', base:25000, dur:'2시간', addr:'서울 용산구 한강대로 100', grade:'S', prob:0.86, laundry:true},
+ {id:7, day:'6월 18일 목요일', time:'17:00', venue:'용산 더베이스', court:'3구장 (유벤투스)', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'6/18명', base:25000, dur:'2시간', addr:'서울 용산구 한강대로 100', grade:'A3', prob:0.67, eightvs:true, parking:true},
+ {id:8, day:'6월 18일 목요일', time:'19:00', venue:'마포 GS풋살파크', court:'2구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'10/18명', base:24000, dur:'2시간', addr:'서울 마포구 월드컵로 240', grade:'A1', prob:0.82, my:true, price:5000, ai:true},
+ {id:9, day:'6월 19일 금요일', time:'14:00', venue:'서울 짐앤조이 2호점', court:'레드구장', fmt:'6vs6', gender:'남녀모두', level:'비기너', cap:'7/18명', base:23000, dur:'2시간', addr:'서울 강남구 봉은사로 200', grade:'-', prob:null, isNew:true, subAvailable:true},
+ {id:10, day:'6월 19일 금요일', time:'15:00', venue:'남서울상가 SKY', court:'1구장', fmt:'5vs5', gender:'남녀모두', level:'아마추어', cap:'5/15명', base:20000, dur:'2시간', addr:'서울 동작구 남부순환로 2000', grade:'A1', prob:0.84, urgent:true, subAvailable:true},
+ {id:11, day:'6월 19일 금요일', time:'16:00', venue:'영등포 SKY', court:'A구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'12/18명', base:21000, dur:'2시간', addr:'서울 영등포구 경인로 800', grade:'S', prob:0.91, confirmed:true, parking:true},
+ {id:12, day:'6월 19일 금요일', time:'18:00', venue:'구로 디지털 풋살', court:'C구장', fmt:'6vs6', gender:'남녀모두', level:'모든 레벨', cap:'3/18명', base:19000, dur:'2시간', addr:'서울 구로구 디지털로 300', grade:'B', prob:0.49},
+ {id:13, day:'6월 20일 토요일', time:'9:00', venue:'강서 KBS', court:'2구장', fmt:'6vs6', gender:'남녀모두', level:'비기너', cap:'1/18명', base:19000, dur:'2시간', addr:'서울 강서구 화곡로 300', grade:'S', prob:0.89, my:true, confirmed:true},
+ {id:14, day:'6월 20일 토요일', time:'9:00', venue:'강서 KBS', court:'3구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'9/18명', base:19000, dur:'2시간', addr:'서울 강서구 화곡로 300', grade:'A1', prob:0.81, price:5000, compact:true, subAvailable:true},
+ {id:15, day:'6월 20일 토요일', time:'10:00', venue:'마곡 풋살스타디움', court:'A면', fmt:'5vs5', gender:'남녀모두', level:'아마추어', cap:'4/15명', base:22000, dur:'2시간', addr:'서울 강서구 마곡중앙로 50', grade:'A2', prob:0.74, price:5000},
+ {id:16, day:'6월 20일 토요일', time:'11:00', venue:'송파 천마', court:'1구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'16/18명', base:18000, dur:'2시간', addr:'서울 송파구 충민로 66', grade:'S', prob:0.92, confirmed:true, price:5000, ai:true},
+ {id:17, day:'6월 20일 토요일', time:'12:00', venue:'잠실 풋살파크', court:'2면', fmt:'6vs6', gender:'남녀모두', level:'비기너', cap:'2/18명', base:20000, dur:'2시간', addr:'서울 송파구 올림픽로 25', grade:'-', prob:null, isNew:true, price:5000},
+ {id:18, day:'6월 20일 토요일', time:'13:00', venue:'성수 SOSO', court:'B구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'6/18명', base:26000, dur:'2시간', addr:'서울 성동구 성수일로 80', grade:'A1', prob:0.82, urgent:true, price:5000},
+ {id:19, day:'6월 20일 토요일', time:'14:00', venue:'노원 하라', court:'B구장', fmt:'6vs6', gender:'남자', level:'아마추어', cap:'8/18명', base:22000, dur:'2시간', addr:'서울 노원구 동일로 1400', grade:'A3', prob:0.66, laundry:true},
+ {id:20, day:'6월 20일 토요일', time:'15:00', venue:'강동 그린필드', court:'A구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'11/18명', base:23000, dur:'2시간', addr:'서울 강동구 천호대로 1000', grade:'A1', prob:0.80, my:true},
+ {id:21, day:'6월 21일 일요일', time:'10:00', venue:'양천 메가박스', court:'1구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'13/18명', base:24000, dur:'2시간', addr:'서울 양천구 목동로 100', grade:'S', prob:0.87, price:5000, laundry:true},
+ {id:22, day:'6월 21일 일요일', time:'11:00', venue:'관악 S풋살', court:'2구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'7/18명', base:22000, dur:'2시간', addr:'서울 관악구 관악로 200', grade:'A3', prob:0.66, price:5000, parking:true},
+ {id:23, day:'6월 21일 일요일', time:'12:00', venue:'동대문 풋살큐브', court:'A면', fmt:'5vs5', gender:'남녀모두', level:'모든 레벨', cap:'2/15명', base:20000, dur:'2시간', addr:'서울 동대문구 천호대로 50', grade:'-', prob:null, isNew:true, price:5000, compact:true},
+ {id:24, day:'6월 21일 일요일', time:'13:00', venue:'성북 아레나', court:'B구장', fmt:'6vs6', gender:'남자', level:'아마추어', cap:'5/18명', base:24000, dur:'2시간', addr:'서울 성북구 동소문로 150', grade:'A1', prob:0.83, urgent:true, price:5000, ai:true},
+ {id:25, day:'6월 21일 일요일', time:'14:00', venue:'은평 그라운드', court:'1구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'15/18명', base:23000, dur:'2시간', addr:'서울 은평구 통일로 800', grade:'S', prob:0.90, laundry:true},
+ {id:26, day:'6월 21일 일요일', time:'15:00', venue:'중랑 풋살존', court:'C구장', fmt:'6vs6', gender:'남녀모두', level:'비기너', cap:'1/18명', base:19000, dur:'2시간', addr:'서울 중랑구 망우로 300', grade:'-', prob:null, isNew:true, subAvailable:true},
+ {id:27, day:'6월 21일 일요일', time:'16:00', venue:'금천 풋살파크', court:'A구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'18/18명', base:21000, dur:'2시간', addr:'서울 금천구 시흥대로 400', grade:'S', prob:0.93, confirmed:true, price:5000, league:true},
+ {id:28, day:'6월 21일 일요일', time:'17:00', venue:'노원 하라', court:'C구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'6/18명', base:22000, dur:'2시간', addr:'서울 노원구 동일로 1400', grade:'A1', prob:0.82, my:true, price:5000, urgent:true},
+ {id:29, day:'6월 21일 일요일', time:'18:00', venue:'마포 GS풋살파크', court:'3구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'9/18명', base:24000, dur:'2시간', addr:'서울 마포구 월드컵로 240', grade:'A2', prob:0.75, my:true},
+ {id:30, day:'6월 21일 일요일', time:'19:00', venue:'구로 디지털 풋살', court:'D구장', fmt:'6vs6', gender:'남녀모두', level:'모든 레벨', cap:'4/18명', base:19000, dur:'2시간', addr:'서울 구로구 디지털로 300', grade:'B', prob:0.49, price:5000}
+];
+var dayClass=function(d){return d.indexOf('토요일')>-1?'sat':d.indexOf('일요일')>-1?'sun':'';};
+function resolve(m){
+  if(m.confirmed) return {status:'confirm'};
+  if(m.urgent) return {status:'urgent'};
+  if(m.prob!=null && m.prob>=0.8) return {status:'likely',level:'strong'};
+  if(m.prob!=null && m.prob>=0.6) return {status:'likely',level:'soft'};
+  if(m.isNew) return {status:'new'};
+  return null;
+}
+function statusKey(r){return r.status==='likely'?(r.level==='strong'?'likelyStrong':'likelySoft'):r.status;}
+function badge(k){var s=STYLE[k];return '<span class="bdg '+s.cls+'">'+s.label+'</span>';}
+function pct(m){return m.prob!=null?Math.round(m.prob*100)+'%':'데이터 없음';}
+function upArrow(sz,strong){if(strong==null)strong=true;var inner=strong?('<path d="M8.93569 21L3 15.0643L3.84796 14.2164L9.78364 20.152L8.93569 21Z" fill="#FF894A"/><path d="M10.6316 19.3041L4.69591 13.3684L7.23978 10.8245L13.1755 16.7602L10.6316 19.3041Z" fill="#FF894A"/><path d="M21 16.9532L16.9913 12.9444L14.0234 15.9123L8.08773 9.97658L11.0556 7.00874L7.04683 3H21V16.9532Z" fill="#FF894A"/>'):('<path d="M10.6316 19.3041L4.69591 13.3684L7.23978 10.8245L13.1755 16.7602L10.6316 19.3041Z" fill="#FF894A"/><path d="M21 16.9532L16.9913 12.9444L14.0234 15.9123L8.08773 9.97658L11.0556 7.00874L7.04683 3H21V16.9532Z" fill="#FF894A"/>');return '<svg viewBox="0 0 24 24" width="'+sz+'" height="'+sz+'" fill="none" style="display:block;flex:none">'+inner+'</svg>';}
+
+/* 포맷 줄 우측: 진행 유력=주황 화살표(기존 표시), 신규=NEW 라벨  ·  시간 줄 우측: 가격/긴급양도/MY  ·  확정: 코너 리본  ·  MY=단독 */
+function statusBadge(r){return badge(statusKey(r));}
+function cardHTML(m){
+  var r=resolve(m);
+  var top='',bottom='';
+  if(m.my){
+    top='<span class="bdg b-my">MY</span>';
+  }else{
+    if(m.price) top+='<span class="bdg b-pr">+'+m.price.toLocaleString()+'원</span>';
+    if(r && r.status==='urgent') top+='<span class="bdg b-ug">긴급양도</span>';
+    if(r && r.status==='likely') bottom=upArrow(18, r.level==='strong');
+    else if(r && r.status==='new') bottom='<span class="lbl-n">N</span>';
+    else if(r && r.status==='confirm') bottom='<span class="lbl-cf">확정</span>';
+  }
+  return '<div class="mcard'+((r||m.my)?' on':'')+'" data-id="'+m.id+'">'
+    +'<div class="mtop"><span class="mtime">'+m.time+'</span><span class="mchips">'+top+'</span></div>'
+    +'<div class="mvenue">'+m.venue+'</div>'
+    +'<div class="mcourt">'+m.court+'</div>'
+    +'<div class="mfmtrow"><span class="mfmt">'+m.fmt+' · '+m.gender+'</span>'+bottom+'</div></div>';
+}
+var sortMode='default';
+var sortPred={
+  soon:function(m){var r=resolve(m);return !!m.price||(r&&r.status==='urgent');},
+  confirmed:function(m){var r=resolve(m);return r&&r.status==='confirm';},
+  badged:function(m){var r=resolve(m);return !!resolve(m)||!!m.price||!!m.my;}
+};
+var sortLabel={soon:'시작 임박 · 긴급양도/프로모션',confirmed:'확정 매치',badged:'배지 있는 매치'};
+function renderList(onlyLikely){
+  if(sortMode!=='default') return renderSorted();
+  var days=[]; matches.forEach(function(m){if(days.indexOf(m.day)<0)days.push(m.day);});
+  var html='';
+  days.forEach(function(d){
+    var grp=matches.filter(function(m){return m.day===d;});
+    if(onlyLikely) grp=grp.filter(function(m){var r=resolve(m);return r&&r.status==='likely';});
+    if(!grp.length) return;
+    html+='<div class="daygrp"><div class="dayhd '+dayClass(d)+'">'+d+'</div><div class="row">'+grp.map(cardHTML).join('')+'</div></div>';
+  });
+  document.getElementById('listBody').innerHTML=html||'<div style="padding:40px 16px;color:var(--mute);font-size:14px;text-align:center">진행 유력 매치가 없어요.</div>';
+}
+function renderSorted(){
+  var days=[]; matches.forEach(function(m){if(days.indexOf(m.day)<0)days.push(m.day);});
+  var list=matches.filter(sortPred[sortMode]);
+  list.sort(function(a,b){var da=days.indexOf(a.day)-days.indexOf(b.day);if(da)return da;return (parseInt(a.time)||0)-(parseInt(b.time)||0);});
+  var body=list.length?('<div class="row">'+list.map(cardHTML).join('')+'</div>'):'<div style="padding:40px 16px;color:var(--mute);font-size:14px;text-align:center">해당 매치가 없어요.</div>';
+  document.getElementById('listBody').innerHTML='<div class="daygrp"><div class="dayhd">'+sortLabel[sortMode]+' · '+list.length+'건</div>'+body+'</div>';
+}
+
+function sec(icon,color,title,body,opts){
+  opts=opts||{};
+  var extra='';
+  if(opts.btn) extra+='<button class="secbtn">'+opts.btn+'</button>';
+  if(opts.link) extra+='<a class="seclink" href="#">'+opts.link+'</a>';
+  if(opts.plate) extra+='<div class="plate"><div style="flex:1"><div class="lb">차량 번호</div><input value="11가 1234"></div><button class="reg">등록하기</button></div>';
+  return '<div class="sec"><div class="sechd"><span class="ci">'+svg(icon,19,color)+'</span><span class="ct">'+title+'</span></div><div class="secbody">'+body+'</div>'+extra+'</div>';
+}
+function likelySec(){return '<div class="sec likely"><span style="flex:none;padding-top:1px">'+upArrow(24)+'</span><div><p class="lk-t">진행 유력 매치</p><p class="lk-b">최근 5주 동안 진행이 많이 된 매치예요.</p></div></div>';}
+function newSec(){return '<div class="sec likely"><span class="newmark">N</span><div><p class="lk-t">신규 매치</p><p class="lk-b">최근에 새로 열린 매치예요. 아직 신청 인원이 많지 않을 수 있어요.</p></div></div>';}
+
+function detailHTML(m){
+  var r=resolve(m);
+  var mt='';
+  if(m.compact) mt+='<span class="mt" style="color:#C77A12">'+svg('bolt',16,'#E6A100')+'컴팩트</span>';
+  if(m.ai) mt+='<span class="mt" style="color:#2C6FF0">'+svg('refresh',16,'#2C6FF0')+'AI 배정</span>';
+  if(m.league) mt+='<span class="mt" style="color:#1B8A45">'+svg('plant',16,'#1B8A45')+'팀 리그</span>';
+  if(m.eightvs) mt+='<span class="mt" style="color:#5A4BC4">'+svg('target',16,'#5A4BC4')+'8vs8</span>';
+  var tb=''; if(r && (r.status==='confirm'||r.status==='urgent')) tb+=badge(statusKey(r));
+  if(m.laundry) tb+='<span class="bdg b-ld">런드리</span>';
+  if(m.subAvailable) tb+='<span class="bdg b-sub">SUB</span>';
+  var priceHTML='<div class="dprice">'+m.base.toLocaleString()+'원'+(m.price?' <span class="add">+ '+m.price.toLocaleString()+'원</span>':'')+' <span class="dur">/ '+m.dur+'</span></div>';
+  var s='';
+  if(r&&r.status==='likely') s+=likelySec();
+  if(r&&r.status==='new') s+=newSec();
+  if(m.compact) s+=sec('bolt','#E6A100','컴팩트 매치 진행 안내','<ul><li>60분 동안 타이트하게 매치를 운영해요.</li><li>신속한 교체를 위해 교체 인원은 구장 안에 대기시켜 주세요.</li><li>매치당 15,000원이 정산됩니다.</li></ul>',{link:'컴팩트 매치 로테이션 확인하기'});
+  if(m.league) s+=sec('plant','#1B8A45','팀 리그 진행 안내','<ul><li>리그 매니저는 판정 및 득점을 기록해요.</li><li>참가자는 판정에 대한 항의를 할 수 없어요.</li><li>팀 밸런스, 로테이션을 관리하지 않아요.</li><li>매치 3일 전부터는 양도할 수 없어요.</li></ul>',{link:'팀 리그 자세히 보기'});
+  if(m.eightvs) s+=sec('target','#5A4BC4','8vs8 매치 진행 안내','<ul><li>매치 전후로 그물 작업을 필수로 진행해야 해요.</li><li>작업 방법은 매치 매뉴얼에서 확인해 주세요.</li><li>매치 진행 전 꼭 매치 매뉴얼을 숙지해 주세요.</li></ul>');
+  if(m.ai) s+=sec('refresh','#2C6FF0','AI 팀 배정 진행 안내','<ul><li>매치 시작 60분 전 레벨, 친구 관계를 바탕으로 AI가 팀을 배정해요.</li><li>플랩 친구는 3인까지 높은 확률로 같은 팀에 배정돼요.</li><li>매치 시작 전에는 팀을 변경할 수 없고, 1쿼터가 종료된 이후에 팀을 변경할 수 있어요.</li><li>지각자가 있으면 팀 변경 없이 휴식 중인 참가자와 함께 매치를 진행해 주세요.</li></ul>');
+  s+=sec('mcircle','#26282E','소셜 매치 진행 안내','참가자의 개인정보(이름, 레벨, 연락처)는 \u2018원활한 매치 진행\u2019을 목적으로 제공됩니다.<br>개인정보 유출 시 책임은 매니저에게 있습니다.');
+  s+=sec('alert','#E5392E','매치 타입 변경 안내','매치 시작 시간 20시간 전까지 신청 인원이 부족할 경우, 남녀 모두 &amp; 모든 레벨 매치로 변경돼요.');
+  if(m.subAvailable) s+=sec('tag','#2C6FF0','매니저 서브','매치에 참여하면서 진행할 수 있어요.<div class="grp">[조건]</div><ul><li>신청일 기준 30일 이내 두 매치 이상 진행</li><li>플랩풋볼에서 옐로/레드 카드를 발급받지 않은 매니저</li></ul>',{btn:'매니저 서브 신청'});
+  if(m.parking) s+=sec('car','#E5392E','주차 신청','출발 체크 전까지 입력해 주세요.<br>구장에서 제공하는 시간까지만 무료 주차가 가능하며, 연타임 진행 또는 개인 사유로 시간이 초과될 경우 비용이 발생합니다.',{plate:true});
+  if(m.laundry) s+=sec('wash','#2563EB','런드리 안내','해당 구장에서는 신청 없이 런드리 장비를 사용할 수 있어요. 모두가 함께 사용하는 장비이니 가이드를 따라 깨끗하게 사용, 반납해 주세요.',{btn:'런드리 가이드 보러가기'});
+  s+=sec('pin','#16A07A','구장 특이사항','<div class="grp">&lt;참고 사항&gt;</div><ul><li>주차 : 참가자가 직접 카페 내부의 태블릿을 통해 주차 등록</li><li>흡연: 흡연부스 외 절대 금연</li><li>조명 : 자동 (점등 18시 / 소등 2시 30분) 조명이 들어와 있지 않을 경우 구장 옆 사무실에 문의</li><li>구장 카페에서 나와 오른편 엘리베이터 이용하여 퇴장 (롯데시네마 출구 이용 금지)</li></ul><div class="grp">&lt;구장 마무리 필수 사항&gt;</div><ul><li>담배 꽁초 및 쓰레기 확인하기</li><li>실내 입장할 때, 참가자분들 반드시 마스크 착용하실 수 있도록 안내 필요합니다.</li><li>그늘막은 구장측에 조작 요청을 해주세요. 매니저 단독 조작은 불가합니다.</li></ul>');
+  s+='<div class="sec"><div class="sechd"><span class="ci">'+svg('mood',19,'#E6A100')+'</span><span class="ct">양도</span></div><button class="secbtn">양도 신청하기</button><div class="secbody" style="margin-top:13px">매치 진행이 어려울 경우 양도를 신청할 수 있어요. 매치 시작 전까지 양도가 되지 않을 경우 직접 매치를 진행해야 해요.</div></div>';
+  var badgeName=r?(r.status==='likely'?'진행 유력':STYLE[statusKey(r)].label):'없음';
+  return '<div class="dbar"><button data-back>'+svg('chevL',24,'#191A1C')+'</button><span class="dt">매치 상세</span></div>'
+    +'<div class="hero">'+svg('pin',26,'#B6BCC3')+'</div>'
+    +'<div class="dhead">'
+      +(mt?'<div class="minitags">'+mt+'</div>':'')
+      +'<p class="dtdate">'+m.day+' '+m.time+'</p>'
+      +'<div class="dtitle"><span class="nm">'+m.venue+'</span>'+tb+'</div>'
+      +'<div class="daddr">'+m.addr+'<span class="achip">'+svg('copy',13,'#4A4F56')+'복사</span><span class="achip">'+svg('map',13,'#4A4F56')+'지도</span></div>'
+      +'<p class="dline">'+m.gender+' · '+m.fmt+' · 모든레벨 · '+m.cap+'</p>'
+      +priceHTML+'<button class="dcta">매치 진행하기</button></div>'
+    +s
+    +'<div class="dbottom"><a href="#">매치 제외 신청하기 '+svg('chevR',15,'#A0A6AC')+'</a></div>'
+    +'<div class="demo">데모 데이터 · 등급 '+m.grade+' · 진행확률 '+pct(m)+' → 배지 '+badgeName+'</div>';
+}
+
+function renderTable(){
+  var head='<thead><tr><th>#</th><th>날짜</th><th>시간</th><th>경기장</th><th>구장</th><th>등급</th><th>진행확률</th><th>부가 속성</th><th>최종 배지 (위치)</th></tr></thead>';
+  var rows=matches.map(function(m){
+    var r=resolve(m);
+    var tags=[];
+    if(m.price) tags.push('+'+m.price.toLocaleString()+'원');
+    if(m.my) tags.push('MY');
+    if(m.laundry) tags.push('런드리'); if(m.parking) tags.push('주차'); if(m.ai) tags.push('AI 배정');
+    if(m.compact) tags.push('컴팩트'); if(m.league) tags.push('팀 리그'); if(m.eightvs) tags.push('8vs8'); if(m.subAvailable) tags.push('SUB');
+    var tagHTML=tags.length?tags.map(function(t){return '<span class="tg">'+t+'</span>';}).join(''):'<span style="color:#B6BCC3">—</span>';
+    var fb,pos;
+    if(m.my){fb='<span class="fb b-my">MY</span>';pos='<span class="pos">시간 줄(단독)</span>';}
+    else if(!r){fb='<span style="color:#B6BCC3">없음</span>';pos='';}
+    else{var k=statusKey(r);
+      fb=r.status==='confirm'?'<span class="fb b-cf">확정</span>':(r.status==='likely'?'<span class="fb" style="background:#FFF0E6;color:#F36F21">↗ 진행 유력</span>':(r.status==='new'?'<span class="fb" style="background:#FFE875;color:#97500F">N</span>':'<span class="fb '+STYLE[k].cls+'">'+STYLE[k].label+'</span>'));
+      pos='<span class="pos">'+(r.status==='urgent'?'시간 줄':(r.status==='confirm'?'포맷 줄':'포맷 줄'))+'</span>';}
+    return '<tr><td class="v">'+m.id+'</td><td>'+m.day+'</td><td>'+m.time+'</td><td class="v">'+m.venue+'</td><td>'+m.court+'</td><td class="v">'+m.grade+'</td><td>'+pct(m)+'</td><td>'+tagHTML+'</td><td>'+fb+pos+'</td></tr>';
+  }).join('');
+  document.getElementById('dataTable').innerHTML=head+'<tbody>'+rows+'</tbody>';
+}
+
+var listV=document.getElementById('listView'), detV=document.getElementById('detailView');
+function openDetail(id){var m=matches.find(function(x){return x.id===id;});detV.innerHTML=detailHTML(m);listV.style.display='none';detV.style.display='block';detV.scrollTop=0;}
+function closeDetail(){detV.style.display='none';listV.style.display='block';}
+document.addEventListener('click',function(e){
+  var card=e.target.closest('.mcard'); if(card){openDetail(+card.dataset.id);return;}
+  if(e.target.closest('[data-back]')){closeDetail();return;}
+});
+var likelyOn=false;
+document.getElementById('f-likely').addEventListener('click',function(){likelyOn=!likelyOn;this.classList.toggle('act',likelyOn);renderList(likelyOn);});
+var lblM=document.getElementById('lblModal');
+document.getElementById('openLblModal').addEventListener('click',function(){lblM.classList.add('open');});
+lblM.addEventListener('click',function(e){if(e.target===lblM||e.target.closest('[data-close]'))lblM.classList.remove('open');});
+(function(){var KEY='plab_lblguide_seen_v1';var seen=false;try{seen=!!localStorage.getItem(KEY);}catch(e){}
+  if(!seen){setTimeout(function(){lblM.classList.add('open');},550);try{localStorage.setItem(KEY,'1');}catch(e){}}})();
+var sortM=document.getElementById('sortModal');
+document.getElementById('sortChip').addEventListener('click',function(){sortM.classList.add('open');});
+sortM.addEventListener('click',function(e){
+  if(e.target===sortM||e.target.closest('[data-close]')){sortM.classList.remove('open');return;}
+  var o=e.target.closest('.sopt'); if(!o)return;
+  sortMode=o.dataset.sort;
+  Array.prototype.forEach.call(sortM.querySelectorAll('.sopt'),function(x){x.classList.toggle('sel',x===o);});
+  document.getElementById('sortChip').classList.toggle('act',sortMode!=='default');
+  renderList(typeof likelyOn!=='undefined'&&likelyOn);
+  sortM.classList.remove('open');
+});
+
+document.querySelectorAll('[data-icon]').forEach(function(el){el.insertAdjacentHTML('afterbegin',svg(el.dataset.icon, +el.dataset.sz||20, el.dataset.color||'currentColor'));});
+renderList(false);
+renderTable();
+</script>
+</body>
+</html>
