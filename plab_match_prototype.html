@@ -100,6 +100,15 @@ body{background:var(--page);font-family:Pretendard,-apple-system,BlinkMacSystemF
 .b-cf{background:#E1EAFF;color:#1B5FD9} .b-nw{background:#FFE875;color:#97500F}
 .b-ug{background:#FDECEC;color:#E5392E} .b-pr{background:#EFF1F3;color:#6B7178}
 .b-my{background:#23262C;color:#fff} .b-ld{background:#E8F1FF;color:#2563EB} .b-sub{background:#FFF2E0;color:#C77A12}
+.upcoming{padding:16px 16px 4px;border-bottom:1px solid var(--dv)}
+.upcoming-hd{font-size:13px;font-weight:700;color:var(--sub);margin:0 0 10px;letter-spacing:-.2px}
+.upcoming-item{display:flex;align-items:center;gap:12px;padding:11px 14px;background:#F7F9FF;border:1px solid #D6E4FF;border-radius:12px;margin-bottom:8px;cursor:pointer}
+.upcoming-item:last-of-type{margin-bottom:0}
+.upcoming-dot{width:8px;height:8px;border-radius:50%;background:#2C6FF0;flex:none}
+.upcoming-info{flex:1;min-width:0}
+.upcoming-date{font-size:12px;color:var(--sub);margin:0 0 2px}
+.upcoming-venue{font-size:15px;font-weight:700;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.upcoming-more{font-size:13px;color:var(--sub);text-align:center;padding:6px 0 2px}
 .promo{position:sticky;bottom:0;display:flex;align-items:center;gap:10px;margin:10px 12px 14px;padding:15px 16px;background:#fff;border:1px solid var(--bd);border-radius:14px;box-shadow:0 -2px 14px rgba(0,0,0,.05)}
 .promo .tk{color:var(--blue);display:flex} .promo .pt{flex:1;font-size:15px;font-weight:700} .promo .cv{color:var(--mute);display:flex}
 
@@ -166,6 +175,7 @@ td{color:#54585E} td.v{font-weight:600;color:#191A1C}
       <div class="ic"><span data-icon="search" data-sz="23"></span><span data-icon="calendar" data-sz="23"></span><span data-icon="bell" data-sz="23"><span class="dot"></span></span><span data-icon="user" data-sz="23"></span></div>
     </div>
     <div class="notice"><span class="tag">공지</span><span class="txt">2026 월드컵 매치 진행 이벤트 안내</span><span class="cv" data-icon="chevR" data-sz="18" data-color="#A0A6AC"></span></div>
+    <div id="upcomingSection" style="display:none"></div>
     <div class="filters">
       <div class="chip vest"><span data-icon="vest" data-sz="18" data-color="#A0A6AC"></span></div>
 <div class="chip on">서울 <span style="display:flex" data-icon="chevD" data-sz="15" data-color="#2C6FF0"></span></div>
@@ -377,7 +387,7 @@ function sec(icon,color,title,body,opts){
   if(opts.plate) extra+='<div class="plate"><div style="flex:1"><div class="lb">차량 번호</div><input value="11가 1234"></div><button class="reg">등록하기</button></div>';
   return '<div class="sec"><div class="sechd"><span class="ci">'+svg(icon,19,color)+'</span><span class="ct">'+title+'</span></div><div class="secbody">'+body+'</div>'+extra+'</div>';
 }
-function likelySec(){return '<div class="sec likely"><span style="flex:none;padding-top:1px">'+upArrow(24)+'</span><div><p class="lk-t">진행 유력 매치</p><p class="lk-b">최근 2개월 간 진행이 많이 된 매치예요.</p></div></div>';}
+function likelySec(level){return '<div class="sec likely"><span style="flex:none;padding-top:1px">'+upArrow(24,level==='strong')+'</span><div><p class="lk-t">진행 유력 매치</p><p class="lk-b">최근 2개월 간 진행이 많이 된 매치예요.</p></div></div>';}
 function newSec(){return '<div class="sec likely"><span class="newmark">N</span><div><p class="lk-t">신규 매치</p><p class="lk-b">최근에 새로 열린 매치예요. 아직 신청 인원이 많지 않을 수 있어요.</p></div></div>';}
 
 function detailHTML(m){
@@ -392,7 +402,7 @@ function detailHTML(m){
   if(m.subAvailable) tb+='<span class="bdg b-sub">SUB</span>';
   var priceHTML='<div class="dprice">'+m.base.toLocaleString()+'원'+(m.price?' <span class="add">+ '+m.price.toLocaleString()+'원</span>':'')+' <span class="dur">/ '+m.dur+'</span></div>';
   var s='';
-  if(r&&r.status==='likely') s+=likelySec();
+  if(r&&r.status==='likely') s+=likelySec(r.level);
   if(r&&r.status==='new') s+=newSec();
   if(m.compact) s+=sec('bolt','#E6A100','컴팩트 매치 진행 안내','<ul><li>60분 동안 타이트하게 매치를 운영해요.</li><li>신속한 교체를 위해 교체 인원은 구장 안에 대기시켜 주세요.</li><li>매치당 15,000원이 정산됩니다.</li></ul>',{link:'컴팩트 매치 로테이션 확인하기'});
   if(m.league) s+=sec('plant','#1B8A45','팀 리그 진행 안내','<ul><li>리그 매니저는 판정 및 득점을 기록해요.</li><li>참가자는 판정에 대한 항의를 할 수 없어요.</li><li>팀 밸런스, 로테이션을 관리하지 않아요.</li><li>매치 3일 전부터는 양도할 수 없어요.</li></ul>',{link:'팀 리그 자세히 보기'});
@@ -418,7 +428,7 @@ function detailHTML(m){
     +s
     +'<div class="dbottom"><a href="#">매치 제외 신청하기 '+svg('chevR',15,'#A0A6AC')+'</a></div>'
     +'<div class="demo">데모 데이터 · 등급 '+m.grade+' · 진행확률 '+pct(m)+' → 배지 '+badgeName+'</div>'
-    +'<div class="dcta-bar"><button class="dcta" data-matchid="'+m.id+'">신청하기</button></div>';
+    +(m.my||selectedIds.indexOf(m.id)>=0?'':'<div class="dcta-bar"><button class="dcta" data-matchid="'+m.id+'">신청하기</button></div>');
 }
 
 function renderTable(){
@@ -444,6 +454,35 @@ function renderTable(){
 }
 
 var listV=document.getElementById('listView'), detV=document.getElementById('detailView');
+var upcomingEl=document.getElementById('upcomingSection');
+function renderUpcoming(){
+  if(!selectedIds.length){upcomingEl.style.display='none';return;}
+  var show=selectedIds.slice(0,2);
+  var rest=selectedIds.length-show.length;
+  var html='<div class="upcoming"><p class="upcoming-hd">진행 예정 매치</p>';
+  show.forEach(function(id){
+    var m=matches.find(function(x){return x.id===id;});
+    if(!m)return;
+    html+='<div class="upcoming-item" data-id="'+m.id+'">'
+      +'<span class="upcoming-dot"></span>'
+      +'<div class="upcoming-info">'
+        +'<p class="upcoming-date">'+m.day+' '+m.time+'</p>'
+        +'<p class="upcoming-venue">'+m.venue+' '+m.court+'</p>'
+      +'</div>'
+      +'<span style="display:flex;color:var(--mute)" data-icon="chevR" data-sz="16" data-color="#A0A6AC"></span>'
+    +'</div>';
+  });
+  if(rest>0) html+='<p class="upcoming-more">'+rest+'개의 매치가 더 있어요</p>';
+  html+='</div>';
+  upcomingEl.innerHTML=html;
+  upcomingEl.style.display='block';
+  upcomingEl.querySelectorAll('[data-icon]').forEach(function(el){
+    el.insertAdjacentHTML('afterbegin',svg(el.dataset.icon,+el.dataset.sz||16,el.dataset.color||'currentColor'));
+  });
+  upcomingEl.querySelectorAll('.upcoming-item').forEach(function(el){
+    el.addEventListener('click',function(){openDetail(+el.dataset.id);});
+  });
+}
 
 function addHours(t,h){var m=timeMin(t)+h*60;return Math.floor(m/60)+':'+(m%60<10?'0':'')+m%60;}
 
@@ -461,7 +500,7 @@ function getSuggestion(m){
     return {
       type:'next',
       tag:'같은 구장 · 다음 타임',
-      title:'동일 구장 다음 타임 매니저가 없어요',
+      title:'같은 구장 다음 타임에 매니저가 필요해요',
       desc:'선택한 매치 바로 다음 시간대('+nextTime+')에 매니저가 배정되지 않았어요.',
       time:nextTime,
       venue:m.venue,
@@ -516,6 +555,7 @@ var confM=document.getElementById('confirmModal');
 var CONF_KEY='plab_conf_hide_until';
 var _pendingSugg=null;
 var _pendingSuggMatch=null;
+var selectedIds=[];
 function shouldShowConf(){
   try{var u=localStorage.getItem(CONF_KEY);if(u&&Date.now()<+u)return false;}catch(e){}
   return true;
@@ -523,8 +563,7 @@ function shouldShowConf(){
 function openConfirm(m,isFixed){
   var dayLabel=isFixed?('매주 '+m.day.split(' ').pop()+' '+m.time):m.day+' '+m.time;
   document.getElementById('confirmList').innerHTML=
-    '<li>'+dayLabel+'</li>'+
-    '<li>'+m.venue+' '+m.court+'</li>';
+    '<li>'+dayLabel+' · '+m.venue+' '+m.court+'</li>';
   document.getElementById('confirmFixedNotes').style.display=isFixed?'block':'none';
   var chk=document.getElementById('confirmNoShow');
   if(chk) chk.checked=false;
@@ -540,11 +579,18 @@ confM.addEventListener('click',function(e){if(e.target===confM)closeConfirm();})
 document.getElementById('confirmAccept').addEventListener('click',function(){
   var chk=document.getElementById('confirmNoShow');
   if(chk&&chk.checked){try{localStorage.setItem(CONF_KEY,Date.now()+86400000);}catch(e){}}
+  /* 선택 매치 기록 */
+  if(_pendingSuggMatch && selectedIds.indexOf(_pendingSuggMatch.id)<0){
+    selectedIds.push(_pendingSuggMatch.id);
+  }
   closeConfirm();
+  /* 상세 닫고 목록으로 */
+  closeDetail();
+  renderUpcoming();
   /* 매치 선택 완료 후 추천 모달 표시 */
   if(_pendingSugg){
     var s=_pendingSugg; _pendingSugg=null;
-    setTimeout(function(){showSuggest(s);},400);
+    setTimeout(function(){showSuggest(s);},500);
   }
 });
 
@@ -573,7 +619,9 @@ document.addEventListener('click',function(e){
     if(shouldShowConf()){openConfirm(m);}
     else{
       /* 하루동안 보지 않기 설정 시 바로 선택 완료 */
-      if(_pendingSugg){var s=_pendingSugg;_pendingSugg=null;setTimeout(function(){showSuggest(s);},400);}
+      if(selectedIds.indexOf(m.id)<0) selectedIds.push(m.id);
+      closeDetail(); renderUpcoming();
+      if(_pendingSugg){var s=_pendingSugg;_pendingSugg=null;setTimeout(function(){showSuggest(s);},500);}
     }
     return;
   }
