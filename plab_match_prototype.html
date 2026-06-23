@@ -184,7 +184,7 @@ td{color:#54585E} td.v{font-weight:600;color:#191A1C}
       <div class="sheet-hd"><span class="sheet-t">매치 상태 표시 안내</span><button class="sheet-x" data-close><span style="display:flex" data-icon="close" data-sz="22" data-color="#191A1C"></span></button></div>
       <p class="sheet-sub">매치 카드 오른쪽에 표시되는 마크의 의미예요.</p>
       <div class="sheet-bd">
-        <div class="lrow"><span class="lmark"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" style="display:block"><path d="M8.93569 21L3 15.0643L3.84796 14.2164L9.78364 20.152L8.93569 21Z" fill="#FF894A"/><path d="M10.6316 19.3041L4.69591 13.3684L7.23978 10.8245L13.1755 16.7602L10.6316 19.3041Z" fill="#FF894A"/><path d="M21 16.9532L16.9913 12.9444L14.0234 15.9123L8.08773 9.97658L11.0556 7.00874L7.04683 3H21V16.9532Z" fill="#FF894A"/></svg></span><div><p class="lname">진행 유력</p><p class="ldesc">최근 5주 동안 진행이 많이 된 매치예요. 진행 가능성이 높을수록 화살표 꼬리선이 많아져요.</p></div></div>
+        <div class="lrow"><span class="lmark"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" style="display:block"><path d="M8.93569 21L3 15.0643L3.84796 14.2164L9.78364 20.152L8.93569 21Z" fill="#FF894A"/><path d="M10.6316 19.3041L4.69591 13.3684L7.23978 10.8245L13.1755 16.7602L10.6316 19.3041Z" fill="#FF894A"/><path d="M21 16.9532L16.9913 12.9444L14.0234 15.9123L8.08773 9.97658L11.0556 7.00874L7.04683 3H21V16.9532Z" fill="#FF894A"/></svg></span><div><p class="lname">진행 유력</p><p class="ldesc">최근 2개월 간 진행이 많이 된 매치예요. 진행 가능성이 높을수록 화살표 꼬리선이 많아져요.</p></div></div>
         <div class="lrow"><span class="lmark"><span class="lbl-n">N</span></span><div><p class="lname">신규</p><p class="ldesc">최근에 새로 열린 매치예요.</p></div></div>
         <div class="lrow"><span class="lmark"><span class="lbl-cf">확정</span></span><div><p class="lname">확정</p><p class="ldesc">최소 인원이 모여 진행이 확정된 매치예요.</p></div></div>
       </div>
@@ -316,9 +316,9 @@ function upArrow(sz,strong){
   var t5='<path d="M3.84 26.1L-2.1 20.16L-1.25 19.32L4.68 25.25L3.84 26.1Z" fill="#FF894A"/>';
   var t6='<path d="M2.14 27.8L-3.8 21.86L-2.95 21.02L2.98 26.95L2.14 27.8Z" fill="#FF894A"/>';
   if(strong){
-    return '<svg viewBox="-4 0 28 30" width="'+sz+'" height="'+sz+'" fill="none" style="display:block;flex:none">'+head+t1+t2+t3+t4+t5+t6+'</svg>';
+    return '<svg viewBox="-4 0 25 30" width="'+sz+'" height="'+sz+'" fill="none" style="display:block;flex:none">'+head+t1+t2+t3+t4+t5+t6+'</svg>';
   }else{
-    return '<svg viewBox="0 0 24 24" width="'+sz+'" height="'+sz+'" fill="none" style="display:block;flex:none">'+head+t1+'</svg>';
+    return '<svg viewBox="-4 0 25 24" width="'+sz+'" height="'+sz+'" fill="none" style="display:block;flex:none">'+head+t1+'</svg>';
   }
 }
 
@@ -371,7 +371,7 @@ function sec(icon,color,title,body,opts){
   if(opts.plate) extra+='<div class="plate"><div style="flex:1"><div class="lb">차량 번호</div><input value="11가 1234"></div><button class="reg">등록하기</button></div>';
   return '<div class="sec"><div class="sechd"><span class="ci">'+svg(icon,19,color)+'</span><span class="ct">'+title+'</span></div><div class="secbody">'+body+'</div>'+extra+'</div>';
 }
-function likelySec(){return '<div class="sec likely"><span style="flex:none;padding-top:1px">'+upArrow(24)+'</span><div><p class="lk-t">진행 유력 매치</p><p class="lk-b">최근 5주 동안 진행이 많이 된 매치예요.</p></div></div>';}
+function likelySec(){return '<div class="sec likely"><span style="flex:none;padding-top:1px">'+upArrow(24)+'</span><div><p class="lk-t">진행 유력 매치</p><p class="lk-b">최근 2개월 간 진행이 많이 된 매치예요.</p></div></div>';}
 function newSec(){return '<div class="sec likely"><span class="newmark">N</span><div><p class="lk-t">신규 매치</p><p class="lk-b">최근에 새로 열린 매치예요. 아직 신청 인원이 많지 않을 수 있어요.</p></div></div>';}
 
 function detailHTML(m){
