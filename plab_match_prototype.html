@@ -326,11 +326,11 @@ function upArrow(sz,strong){
   if(strong==null)strong=true;
   var head='<path d="M21 16.9532L16.9913 12.9444L14.0234 15.9123L8.08773 9.97658L11.0556 7.00874L7.04683 3H21V16.9532Z" fill="#FF894A"/>';
   var t1='<path d="M10.6316 19.3041L4.69591 13.3684L7.23978 10.8245L13.1755 16.7602L10.6316 19.3041Z" fill="#FF894A"/>';
-  var t2='<path d="M8.93569 21L3 15.0643L3.84796 14.2164L9.78364 20.152L8.93569 21Z" fill="#FF894A"/>';
-  var t3='<path d="M7.24 22.7L1.3 16.76L2.15 15.92L8.08 21.85L7.24 22.7Z" fill="#FF894A"/>';
-  var t4='<path d="M5.54 24.4L-0.4 18.46L0.45 17.62L6.38 23.55L5.54 24.4Z" fill="#FF894A"/>';
-  var t5='<path d="M3.84 26.1L-2.1 20.16L-1.25 19.32L4.68 25.25L3.84 26.1Z" fill="#FF894A"/>';
-  var t6='<path d="M2.14 27.8L-3.8 21.86L-2.95 21.02L2.98 26.95L2.14 27.8Z" fill="#FF894A"/>';
+  var t2='<path d="M9.12 20.80L3.18 14.86L5.30 12.74L11.24 18.68Z" fill="#FF894A"/>';
+  var t3='<path d="M7.63 22.29L1.69 16.35L3.39 14.65L9.33 20.59Z" fill="#FF894A"/>';
+  var t4='<path d="M6.14 23.78L0.20 17.84L1.48 16.56L7.42 22.50Z" fill="#FF894A"/>';
+  var t5='<path d="M4.62 25.30L-1.32 19.36L-0.40 18.44L5.54 24.38Z" fill="#FF894A"/>';
+  var t6='<path d="M3.06 26.86L-2.88 20.92L-2.24 20.28L3.70 26.22Z" fill="#FF894A"/>';
   if(strong){
     return '<svg viewBox="-4 0 25 30" width="'+sz+'" height="'+sz+'" fill="none" style="display:block;flex:none">'+head+t1+t2+t3+t4+t5+t6+'</svg>';
   }else{
@@ -392,6 +392,7 @@ function newSec(){return '<div class="sec likely"><span class="newmark">N</span>
 
 function detailHTML(m){
   var r=resolve(m);
+  var showFull=m.my||selectedIds.indexOf(m.id)>=0;
   var mt='';
   if(m.compact) mt+='<span class="mt" style="color:#C77A12">'+svg('bolt',16,'#E6A100')+'컴팩트</span>';
   if(m.ai) mt+='<span class="mt" style="color:#2C6FF0">'+svg('refresh',16,'#2C6FF0')+'AI 배정</span>';
@@ -411,10 +412,10 @@ function detailHTML(m){
   s+=sec('mcircle','#26282E','소셜 매치 진행 안내','참가자의 개인정보(이름, 레벨, 연락처)는 \u2018원활한 매치 진행\u2019을 목적으로 제공됩니다.<br>개인정보 유출 시 책임은 매니저에게 있습니다.');
   s+=sec('alert','#E5392E','매치 타입 변경 안내','매치 시작 시간 20시간 전까지 신청 인원이 부족할 경우, 남녀 모두 &amp; 모든 레벨 매치로 변경돼요.');
   if(m.subAvailable) s+=sec('tag','#2C6FF0','매니저 서브','매치에 참여하면서 진행할 수 있어요.<div class="grp">[조건]</div><ul><li>신청일 기준 30일 이내 두 매치 이상 진행</li><li>플랩풋볼에서 옐로/레드 카드를 발급받지 않은 매니저</li></ul>',{btn:'매니저 서브 신청'});
-  if(m.parking) s+=sec('car','#E5392E','주차 신청','출발 체크 전까지 입력해 주세요.<br>구장에서 제공하는 시간까지만 무료 주차가 가능하며, 연타임 진행 또는 개인 사유로 시간이 초과될 경우 비용이 발생합니다.',{plate:true});
-  if(m.laundry) s+=sec('wash','#2563EB','런드리 안내','해당 구장에서는 신청 없이 런드리 장비를 사용할 수 있어요. 모두가 함께 사용하는 장비이니 가이드를 따라 깨끗하게 사용, 반납해 주세요.',{btn:'런드리 가이드 보러가기'});
+  if(showFull&&m.parking) s+=sec('car','#E5392E','주차 신청','출발 체크 전까지 입력해 주세요.<br>구장에서 제공하는 시간까지만 무료 주차가 가능하며, 연타임 진행 또는 개인 사유로 시간이 초과될 경우 비용이 발생합니다.',{plate:true});
+  if(showFull&&m.laundry) s+=sec('wash','#2563EB','런드리 안내','해당 구장에서는 신청 없이 런드리 장비를 사용할 수 있어요. 모두가 함께 사용하는 장비이니 가이드를 따라 깨끗하게 사용, 반납해 주세요.',{btn:'런드리 가이드 보러가기'});
   s+=sec('pin','#16A07A','구장 특이사항','<div class="grp">&lt;참고 사항&gt;</div><ul><li>주차 : 참가자가 직접 카페 내부의 태블릿을 통해 주차 등록</li><li>흡연: 흡연부스 외 절대 금연</li><li>조명 : 자동 (점등 18시 / 소등 2시 30분) 조명이 들어와 있지 않을 경우 구장 옆 사무실에 문의</li><li>구장 카페에서 나와 오른편 엘리베이터 이용하여 퇴장 (롯데시네마 출구 이용 금지)</li></ul><div class="grp">&lt;구장 마무리 필수 사항&gt;</div><ul><li>담배 꽁초 및 쓰레기 확인하기</li><li>실내 입장할 때, 참가자분들 반드시 마스크 착용하실 수 있도록 안내 필요합니다.</li><li>그늘막은 구장측에 조작 요청을 해주세요. 매니저 단독 조작은 불가합니다.</li></ul>');
-  s+='<div class="sec"><div class="sechd"><span class="ci">'+svg('mood',19,'#E6A100')+'</span><span class="ct">양도</span></div><button class="secbtn">양도 신청하기</button><div class="secbody" style="margin-top:13px">매치 진행이 어려울 경우 양도를 신청할 수 있어요. 매치 시작 전까지 양도가 되지 않을 경우 직접 매치를 진행해야 해요.</div></div>';
+  if(showFull) s+='<div class="sec"><div class="sechd"><span class="ci">'+svg('mood',19,'#E6A100')+'</span><span class="ct">양도</span></div><button class="secbtn">양도 신청하기</button><div class="secbody" style="margin-top:13px">매치 진행이 어려울 경우 양도를 신청할 수 있어요. 매치 시작 전까지 양도가 되지 않을 경우 직접 매치를 진행해야 해요.</div></div>';
   var badgeName=r?(r.status==='likely'?'진행 유력':STYLE[statusKey(r)].label):'없음';
   return '<div class="dbar"><button data-back>'+svg('chevL',24,'#191A1C')+'</button><span class="dt">매치 상세</span></div>'
     +'<div class="hero">'+svg('pin',26,'#B6BCC3')+'</div>'
@@ -426,7 +427,7 @@ function detailHTML(m){
       +'<p class="dline">'+m.gender+' · '+m.fmt+' · 모든레벨 · '+m.cap+'</p>'
       +priceHTML+'</div>'
     +s
-    +'<div class="dbottom"><a href="#">매치 제외 신청하기 '+svg('chevR',15,'#A0A6AC')+'</a></div>'
+    +(showFull?'<div class="dbottom"><a href="#">매치 제외 신청하기 '+svg('chevR',15,'#A0A6AC')+'</a></div>':'')
     +'<div class="demo">데모 데이터 · 등급 '+m.grade+' · 진행확률 '+pct(m)+' → 배지 '+badgeName+'</div>'
     +(m.my||selectedIds.indexOf(m.id)>=0?'':'<div class="dcta-bar"><button class="dcta" data-matchid="'+m.id+'">신청하기</button></div>');
 }
@@ -516,6 +517,20 @@ function getSuggestion(m){
       title:'이 시간 · 구장 고정 매치에 매니저가 없어요.',
       desc:'같은 구장의 고정 매치에 매니저가 배정되어 있지 않아요.',
       time:'매주 '+m.day.split(' ').pop()+' '+m.time,
+      venue:m.venue,
+      court:m.court,
+      fmt:m.fmt,
+      gender:m.gender
+    };
+  }
+  /* 기본: 다음 타임 매니저 필요 안내 (모든 매치) */
+  if(!m.my){
+    return {
+      type:'next',
+      tag:'같은 구장 · 다음 타임',
+      title:'같은 구장 다음 타임에 매니저가 필요해요',
+      desc:'선택한 매치 바로 다음 시간대('+nextTime+')에 매니저가 배정되지 않았어요.',
+      time:nextTime,
       venue:m.venue,
       court:m.court,
       fmt:m.fmt,
