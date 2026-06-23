@@ -71,6 +71,14 @@ body{background:var(--page);font-family:Pretendard,-apple-system,BlinkMacSystemF
 .sheet-cta{width:100%;background:#191A1C;color:#fff;border:0;border-radius:14px;padding:16px;font-size:16px;font-weight:700;cursor:pointer}
 .no-show-label{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--sub);margin-bottom:12px;cursor:pointer;user-select:none}
 .no-show-label input{width:16px;height:16px;accent-color:#191A1C;cursor:pointer;flex:none}
+.sugg-tag{display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:3px 9px;border-radius:5px;background:#FFF0E6;color:#EA6A1E;margin-bottom:10px}
+.sugg-card{background:#F7F8FA;border:1px solid var(--bd);border-radius:13px;padding:14px 15px;margin:4px 0 16px}
+.sugg-card .sc-time{font-size:20px;font-weight:700;letter-spacing:-.3px;margin:0 0 4px}
+.sugg-card .sc-venue{font-size:14.5px;font-weight:600;margin:0 0 2px}
+.sugg-card .sc-info{font-size:13px;color:var(--sub);margin:0}
+.sheet-btn-row{display:flex;gap:10px;margin-top:6px}
+.sheet-btn-row .btn-sub{flex:1;padding:14px;border:1px solid var(--bd);border-radius:12px;background:#fff;font-size:15px;font-weight:600;color:#54585E;cursor:pointer}
+.sheet-btn-row .btn-main{flex:1;padding:14px;border:none;border-radius:12px;background:#191A1C;color:#fff;font-size:15px;font-weight:700;cursor:pointer}
 .sortopts{margin-top:6px}
 .sopt{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:15px 2px;font-size:15.5px;color:#191A1C;cursor:pointer;border-top:1px solid #F1F3F5}
 .sopt:first-child{border-top:0}
@@ -179,6 +187,20 @@ td{color:#54585E} td.v{font-weight:600;color:#191A1C}
     </div>
   </div>
 
+  <div class="ovl" id="suggestModal">
+    <div class="sheet">
+      <div class="sheet-hd">
+        <span class="sheet-t" id="suggestTitle"></span>
+        <button class="sheet-x" id="suggestClose"><span style="display:flex" data-icon="close" data-sz="22" data-color="#191A1C"></span></button>
+      </div>
+      <p class="sheet-sub" id="suggestDesc"></p>
+      <div class="sugg-card" id="suggestCard"></div>
+      <div class="sheet-btn-row">
+        <button class="btn-sub" id="suggestDismiss">괜찮아요</button>
+        <button class="btn-main" id="suggestAccept">이 매치 선택하기</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div id="tableWrap">
@@ -223,17 +245,17 @@ var STYLE={
   confirm:{cls:'b-cf',label:'확정'}, new:{cls:'b-nw',label:'신규'}, urgent:{cls:'b-ug',label:'긴급양도'}
 };
 var matches=[
- {id:1, day:'6월 17일 수요일', time:'19:00', venue:'용산 더베이스', court:'7구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'8/18명', base:25000, dur:'2시간', addr:'서울 용산구 한강대로 100', grade:'S', prob:0.88, price:5000, laundry:true, parking:true},
+ {id:1, day:'6월 17일 수요일', time:'19:00', venue:'용산 더베이스', court:'7구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'8/18명', base:25000, dur:'2시간', addr:'서울 용산구 한강대로 100', grade:'S', prob:0.88, price:5000, laundry:true, parking:true, nextSlotVacant:true},
  {id:2, day:'6월 17일 수요일', time:'20:00', venue:'노원 하라', court:'A구장', fmt:'6vs6', gender:'남자', level:'비기너', cap:'4/18명', base:22000, dur:'2시간', addr:'서울 노원구 동일로 1400', grade:'A2', prob:0.76, price:5000, ai:true},
  {id:3, day:'6월 17일 수요일', time:'21:00', venue:'송파 천마', court:'4구장', fmt:'6vs6', gender:'남녀모두', level:'모든 레벨', cap:'2/18명', base:18000, dur:'2시간', addr:'서울 송파구 충민로 66', grade:'-', prob:null, isNew:true, price:5000, compact:true},
  {id:4, day:'6월 17일 수요일', time:'22:00', venue:'강남 매치업', court:'B구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'5/18명', base:24000, dur:'2시간', addr:'서울 강남구 테헤란로 300', grade:'A1', prob:0.83, urgent:true, price:5000},
- {id:5, day:'6월 18일 목요일', time:'9:00', venue:'영등포 더에프', court:'A구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'18/18명', base:24000, dur:'2시간', addr:'서울 영등포구 양산로 50', grade:'S', prob:0.90, confirmed:true, price:5000, league:true},
- {id:6, day:'6월 18일 목요일', time:'17:00', venue:'용산 더베이스', court:'1구장 (레알)', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'14/18명', base:25000, dur:'2시간', addr:'서울 용산구 한강대로 100', grade:'S', prob:0.86, laundry:true},
+ {id:5, day:'6월 18일 목요일', time:'9:00', venue:'영등포 더에프', court:'A구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'18/18명', base:24000, dur:'2시간', addr:'서울 영등포구 양산로 50', grade:'S', prob:0.90, confirmed:true, price:5000, league:true, fixedSlotVacant:true},
+ {id:6, day:'6월 18일 목요일', time:'17:00', venue:'용산 더베이스', court:'1구장 (레알)', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'14/18명', base:25000, dur:'2시간', addr:'서울 용산구 한강대로 100', grade:'S', prob:0.86, laundry:true, nextSlotVacant:true, fixedSlotVacant:true},
  {id:7, day:'6월 18일 목요일', time:'17:00', venue:'용산 더베이스', court:'3구장 (유벤투스)', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'6/18명', base:25000, dur:'2시간', addr:'서울 용산구 한강대로 100', grade:'A3', prob:0.67, eightvs:true, parking:true},
  {id:8, day:'6월 18일 목요일', time:'19:00', venue:'마포 GS풋살파크', court:'2구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'10/18명', base:24000, dur:'2시간', addr:'서울 마포구 월드컵로 240', grade:'A1', prob:0.82, my:true, price:5000, ai:true},
  {id:9, day:'6월 19일 금요일', time:'14:00', venue:'서울 짐앤조이 2호점', court:'레드구장', fmt:'6vs6', gender:'남녀모두', level:'비기너', cap:'7/18명', base:23000, dur:'2시간', addr:'서울 강남구 봉은사로 200', grade:'-', prob:null, isNew:true, subAvailable:true},
  {id:10, day:'6월 19일 금요일', time:'15:00', venue:'남서울상가 SKY', court:'1구장', fmt:'5vs5', gender:'남녀모두', level:'아마추어', cap:'5/15명', base:20000, dur:'2시간', addr:'서울 동작구 남부순환로 2000', grade:'A1', prob:0.84, urgent:true, subAvailable:true},
- {id:11, day:'6월 19일 금요일', time:'16:00', venue:'영등포 SKY', court:'A구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'12/18명', base:21000, dur:'2시간', addr:'서울 영등포구 경인로 800', grade:'S', prob:0.91, confirmed:true, parking:true},
+ {id:11, day:'6월 19일 금요일', time:'16:00', venue:'영등포 SKY', court:'A구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'12/18명', base:21000, dur:'2시간', addr:'서울 영등포구 경인로 800', grade:'S', prob:0.91, confirmed:true, parking:true, nextSlotVacant:true},
  {id:12, day:'6월 19일 금요일', time:'18:00', venue:'구로 디지털 풋살', court:'C구장', fmt:'6vs6', gender:'남녀모두', level:'모든 레벨', cap:'3/18명', base:19000, dur:'2시간', addr:'서울 구로구 디지털로 300', grade:'B', prob:0.49},
  {id:13, day:'6월 20일 토요일', time:'9:00', venue:'강서 KBS', court:'2구장', fmt:'6vs6', gender:'남녀모두', level:'비기너', cap:'1/18명', base:19000, dur:'2시간', addr:'서울 강서구 화곡로 300', grade:'S', prob:0.89, my:true, confirmed:true},
  {id:14, day:'6월 20일 토요일', time:'9:00', venue:'강서 KBS', court:'3구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'9/18명', base:19000, dur:'2시간', addr:'서울 강서구 화곡로 300', grade:'A1', prob:0.81, price:5000, compact:true, subAvailable:true},
@@ -247,7 +269,7 @@ var matches=[
  {id:22, day:'6월 21일 일요일', time:'11:00', venue:'관악 S풋살', court:'2구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'7/18명', base:22000, dur:'2시간', addr:'서울 관악구 관악로 200', grade:'A3', prob:0.66, price:5000, parking:true},
  {id:23, day:'6월 21일 일요일', time:'12:00', venue:'동대문 풋살큐브', court:'A면', fmt:'5vs5', gender:'남녀모두', level:'모든 레벨', cap:'2/15명', base:20000, dur:'2시간', addr:'서울 동대문구 천호대로 50', grade:'-', prob:null, isNew:true, price:5000, compact:true},
  {id:24, day:'6월 21일 일요일', time:'13:00', venue:'성북 아레나', court:'B구장', fmt:'6vs6', gender:'남자', level:'아마추어', cap:'5/18명', base:24000, dur:'2시간', addr:'서울 성북구 동소문로 150', grade:'A1', prob:0.83, urgent:true, price:5000, ai:true},
- {id:25, day:'6월 21일 일요일', time:'14:00', venue:'은평 그라운드', court:'1구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'15/18명', base:23000, dur:'2시간', addr:'서울 은평구 통일로 800', grade:'S', prob:0.90, laundry:true},
+ {id:25, day:'6월 21일 일요일', time:'14:00', venue:'은평 그라운드', court:'1구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'15/18명', base:23000, dur:'2시간', addr:'서울 은평구 통일로 800', grade:'S', prob:0.90, laundry:true, fixedSlotVacant:true},
  {id:26, day:'6월 21일 일요일', time:'15:00', venue:'중랑 풋살존', court:'C구장', fmt:'6vs6', gender:'남녀모두', level:'비기너', cap:'1/18명', base:19000, dur:'2시간', addr:'서울 중랑구 망우로 300', grade:'-', prob:null, isNew:true, subAvailable:true},
  {id:27, day:'6월 21일 일요일', time:'16:00', venue:'금천 풋살파크', court:'A구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'18/18명', base:21000, dur:'2시간', addr:'서울 금천구 시흥대로 400', grade:'S', prob:0.93, confirmed:true, price:5000, league:true},
  {id:28, day:'6월 21일 일요일', time:'17:00', venue:'노원 하라', court:'C구장', fmt:'6vs6', gender:'남녀모두', level:'아마추어', cap:'6/18명', base:22000, dur:'2시간', addr:'서울 노원구 동일로 1400', grade:'A1', prob:0.82, my:true, price:5000, urgent:true},
@@ -266,7 +288,19 @@ function resolve(m){
 function statusKey(r){return r.status==='likely'?(r.level==='strong'?'likelyStrong':'likelySoft'):r.status;}
 function badge(k){var s=STYLE[k];return '<span class="bdg '+s.cls+'">'+s.label+'</span>';}
 function pct(m){return m.prob!=null?Math.round(m.prob*100)+'%':'데이터 없음';}
-function upArrow(sz,strong){if(strong==null)strong=true;var inner=strong?('<path d="M8.93569 21L3 15.0643L3.84796 14.2164L9.78364 20.152L8.93569 21Z" fill="#FF894A"/><path d="M10.6316 19.3041L4.69591 13.3684L7.23978 10.8245L13.1755 16.7602L10.6316 19.3041Z" fill="#FF894A"/><path d="M21 16.9532L16.9913 12.9444L14.0234 15.9123L8.08773 9.97658L11.0556 7.00874L7.04683 3H21V16.9532Z" fill="#FF894A"/>'):('<path d="M10.6316 19.3041L4.69591 13.3684L7.23978 10.8245L13.1755 16.7602L10.6316 19.3041Z" fill="#FF894A"/><path d="M21 16.9532L16.9913 12.9444L14.0234 15.9123L8.08773 9.97658L11.0556 7.00874L7.04683 3H21V16.9532Z" fill="#FF894A"/>');return '<svg viewBox="0 0 24 24" width="'+sz+'" height="'+sz+'" fill="none" style="display:block;flex:none">'+inner+'</svg>';}
+function upArrow(sz,strong){
+  if(strong==null)strong=true;
+  var head='<path d="M21 16.9532L16.9913 12.9444L14.0234 15.9123L8.08773 9.97658L11.0556 7.00874L7.04683 3H21V16.9532Z" fill="#FF894A"/>';
+  var t1='<path d="M10.6316 19.3041L4.69591 13.3684L7.23978 10.8245L13.1755 16.7602L10.6316 19.3041Z" fill="#FF894A"/>';
+  var t2='<path d="M8.93569 21L3 15.0643L3.84796 14.2164L9.78364 20.152L8.93569 21Z" fill="#FF894A"/>';
+  var t3='<path d="M7.24 22.7L1.3 16.76L2.15 15.92L8.08 21.85L7.24 22.7Z" fill="#FF894A"/>';
+  var t4='<path d="M5.54 24.4L-0.4 18.46L0.45 17.62L6.38 23.55L5.54 24.4Z" fill="#FF894A"/>';
+  if(strong){
+    return '<svg viewBox="-2 0 26 27" width="'+sz+'" height="'+sz+'" fill="none" style="display:block;flex:none">'+head+t1+t2+t3+t4+'</svg>';
+  }else{
+    return '<svg viewBox="0 0 24 24" width="'+sz+'" height="'+sz+'" fill="none" style="display:block;flex:none">'+head+t1+'</svg>';
+  }
+}
 
 /* 포맷 줄 우측: 진행 유력=주황 화살표(기존 표시), 신규=NEW 라벨  ·  시간 줄 우측: 가격/긴급양도/MY  ·  확정: 코너 리본  ·  MY=단독 */
 function statusBadge(r){return badge(statusKey(r));}
@@ -383,8 +417,89 @@ function renderTable(){
 }
 
 var listV=document.getElementById('listView'), detV=document.getElementById('detailView');
-function openDetail(id){var m=matches.find(function(x){return x.id===id;});detV.innerHTML=detailHTML(m);listV.style.display='none';detV.style.display='block';detV.scrollTop=0;}
-function closeDetail(){detV.style.display='none';listV.style.display='block';}
+
+function addHours(t,h){var m=timeMin(t)+h*60;return Math.floor(m/60)+':'+(m%60<10?'0':'')+m%60;}
+
+function getSuggestion(m){
+  /* 개별 매치: 같은 구장 바로 다음 타임 (2h later) */
+  var nextTime=addHours(m.time,2);
+  var nextMatch=matches.find(function(x){
+    return x.venue===m.venue && x.court===m.court && x.time===nextTime && x.day===m.day && x.id!==m.id;
+  });
+  /* nextSlotVacant 플래그 or 실제 데이터에서 찾음 */
+  var hasNext=m.nextSlotVacant || (nextMatch && !nextMatch.my);
+  var hasFixed=m.fixedSlotVacant;
+
+  if(hasNext){
+    return {
+      type:'next',
+      tag:'같은 구장 · 다음 타임',
+      title:m.venue+' '+m.court+' 다음 타임에\n매니저가 없어요',
+      desc:'선택한 매치 바로 다음 시간대('+nextTime+')에 매니저가 배정되지 않았어요. 연속으로 진행하면 추가 정산을 받을 수 있어요.',
+      time:nextTime,
+      venue:m.venue,
+      court:m.court,
+      fmt:m.fmt,
+      gender:m.gender
+    };
+  }
+  if(hasFixed){
+    return {
+      type:'fixed',
+      tag:'같은 시간 · 고정 매치',
+      title:m.venue+' '+m.court+'\n고정 매치에 매니저가 없어요',
+      desc:'같은 구장의 고정 매치('+m.time+', 매주 반복)에 매니저가 배정되어 있지 않아요. 고정 매치를 함께 진행하면 안정적인 수익을 얻을 수 있어요.',
+      time:m.time+' (매주)',
+      venue:m.venue,
+      court:m.court,
+      fmt:m.fmt,
+      gender:m.gender
+    };
+  }
+  return null;
+}
+
+var suggestM=document.getElementById('suggestModal');
+var suggestAcceptCb=null;
+function showSuggest(sugg,fromMatchId){
+  document.getElementById('suggestTitle').textContent=sugg.title.replace('\n',' ');
+  document.getElementById('suggestDesc').textContent=sugg.desc;
+  document.getElementById('suggestCard').innerHTML=
+    '<span class="sugg-tag">'+sugg.tag+'</span>'+
+    '<p class="sc-time">'+sugg.time+'</p>'+
+    '<p class="sc-venue">'+sugg.venue+' · '+sugg.court+'</p>'+
+    '<p class="sc-info">'+sugg.fmt+' · '+sugg.gender+'</p>';
+  /* 아이콘 초기화 */
+  suggestM.querySelectorAll('[data-icon]').forEach(function(el){
+    if(!el.querySelector('svg'))el.insertAdjacentHTML('afterbegin',svg(el.dataset.icon,+el.dataset.sz||20,el.dataset.color||'currentColor'));
+  });
+  suggestM.classList.add('open');
+}
+function closeSuggest(){suggestM.classList.remove('open');}
+document.getElementById('suggestClose').addEventListener('click',closeSuggest);
+document.getElementById('suggestDismiss').addEventListener('click',closeSuggest);
+suggestM.addEventListener('click',function(e){if(e.target===suggestM)closeSuggest();});
+document.getElementById('suggestAccept').addEventListener('click',function(){
+  closeSuggest();
+  /* 실제 앱에서는 해당 매치 선택 처리. 프로토타입은 알림만 표시 */
+  alert('매치가 선택되었어요! (프로토타입 데모)');
+});
+
+function openDetail(id){
+  var m=matches.find(function(x){return x.id===id;});
+  detV.innerHTML=detailHTML(m);
+  listV.style.display='none';
+  detV.style.display='block';
+  detV.scrollTop=0;
+  /* 아이콘 렌더 */
+  detV.querySelectorAll('[data-icon]').forEach(function(el){
+    el.insertAdjacentHTML('afterbegin',svg(el.dataset.icon,+el.dataset.sz||20,el.dataset.color||'currentColor'));
+  });
+  /* 제안 모달 */
+  var sugg=getSuggestion(m);
+  if(sugg){setTimeout(function(){showSuggest(sugg,id);},600);}
+}
+function closeDetail(){detV.style.display='none';listV.style.display='block';closeSuggest();}
 document.addEventListener('click',function(e){
   var card=e.target.closest('.mcard'); if(card){openDetail(+card.dataset.id);return;}
   if(e.target.closest('[data-back]')){closeDetail();return;}
