@@ -100,15 +100,19 @@ body{background:var(--page);font-family:Pretendard,-apple-system,BlinkMacSystemF
 .b-cf{background:#E1EAFF;color:#1B5FD9} .b-nw{background:#FFE875;color:#97500F}
 .b-ug{background:#FDECEC;color:#E5392E} .b-pr{background:#EFF1F3;color:#6B7178}
 .b-my{background:#23262C;color:#fff} .b-ld{background:#E8F1FF;color:#2563EB} .b-sub{background:#FFF2E0;color:#C77A12}
-.upcoming{padding:16px 16px 4px;border-bottom:1px solid var(--dv)}
-.upcoming-hd{font-size:13px;font-weight:700;color:var(--sub);margin:0 0 10px;letter-spacing:-.2px}
-.upcoming-item{display:flex;align-items:center;gap:12px;padding:11px 14px;background:#F7F9FF;border:1px solid #D6E4FF;border-radius:12px;margin-bottom:8px;cursor:pointer}
-.upcoming-item:last-of-type{margin-bottom:0}
-.upcoming-dot{width:8px;height:8px;border-radius:50%;background:#2C6FF0;flex:none}
-.upcoming-info{flex:1;min-width:0}
-.upcoming-date{font-size:12px;color:var(--sub);margin:0 0 2px}
-.upcoming-venue{font-size:15px;font-weight:700;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.upcoming-more{font-size:13px;color:var(--sub);text-align:center;padding:6px 0 2px}
+.upcoming{padding:20px 16px 0;background:#fff;border-bottom:1px solid var(--dv)}
+.upcoming-title{font-size:22px;font-weight:800;letter-spacing:-.4px;margin:0 0 18px;color:#191A1C}
+.upcoming-entry{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px;cursor:pointer}
+.upcoming-entry-info{flex:1;min-width:0}
+.upcoming-entry-dateline{display:flex;align-items:center;gap:7px;font-size:14px;color:var(--sub);margin:0 0 3px}
+.upcoming-chip-today{font-size:13px;font-weight:700;color:#15B66B;letter-spacing:0}
+.upcoming-chip-d{font-size:13px;font-weight:700;color:var(--blue);letter-spacing:0}
+.upcoming-venueline{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:0}
+.upcoming-vname{font-size:18px;font-weight:700;letter-spacing:-.3px;color:#191A1C}
+.upcoming-chip-free{background:#191A1C;color:#fff;font-size:11px;font-weight:800;padding:3px 7px;border-radius:6px;letter-spacing:.3px}
+.upcoming-depart{background:#191A1C;color:#fff;border:none;border-radius:10px;padding:11px 16px;font-size:14px;font-weight:700;cursor:pointer;flex:none;white-space:nowrap}
+.upcoming-divider{border:none;border-top:1px solid var(--bd);margin:2px 0 0}
+.upcoming-more{font-size:14px;color:var(--sub);text-align:center;padding:14px 0 16px;margin:0}
 .promo{position:sticky;bottom:0;display:flex;align-items:center;gap:10px;margin:10px 12px 14px;padding:15px 16px;background:#fff;border:1px solid var(--bd);border-radius:14px;box-shadow:0 -2px 14px rgba(0,0,0,.05)}
 .promo .tk{color:var(--blue);display:flex} .promo .pt{flex:1;font-size:15px;font-weight:700} .promo .cv{color:var(--mute);display:flex}
 
@@ -392,11 +396,10 @@ function newSec(){return '<div class="sec likely"><span class="newmark">N</span>
 
 function detailHTML(m){
   var r=resolve(m);
-  var showFull=m.my||selectedIds.indexOf(m.id)>=0;
+  var showFull=selectedIds.indexOf(m.id)>=0;
   var mt='';
   if(m.compact) mt+='<span class="mt" style="color:#C77A12">'+svg('bolt',16,'#E6A100')+'컴팩트</span>';
   if(m.ai) mt+='<span class="mt" style="color:#2C6FF0">'+svg('refresh',16,'#2C6FF0')+'AI 배정</span>';
-  if(m.league) mt+='<span class="mt" style="color:#1B8A45">'+svg('plant',16,'#1B8A45')+'팀 리그</span>';
   if(m.eightvs) mt+='<span class="mt" style="color:#5A4BC4">'+svg('target',16,'#5A4BC4')+'8vs8</span>';
   var tb=''; if(r && (r.status==='confirm'||r.status==='urgent')) tb+=badge(statusKey(r));
   if(m.laundry) tb+='<span class="bdg b-ld">런드리</span>';
@@ -460,28 +463,32 @@ function renderUpcoming(){
   if(!selectedIds.length){upcomingEl.style.display='none';return;}
   var show=selectedIds.slice(0,2);
   var rest=selectedIds.length-show.length;
-  var html='<div class="upcoming"><p class="upcoming-hd">진행 예정 매치</p>';
-  show.forEach(function(id){
+  var html='<div class="upcoming"><p class="upcoming-title">짱호두님의 진행 예정 매치</p>';
+  show.forEach(function(id,idx){
     var m=matches.find(function(x){return x.id===id;});
     if(!m)return;
-    html+='<div class="upcoming-item" data-id="'+m.id+'">'
-      +'<span class="upcoming-dot"></span>'
-      +'<div class="upcoming-info">'
-        +'<p class="upcoming-date">'+m.day+' '+m.time+'</p>'
-        +'<p class="upcoming-venue">'+m.venue+' '+m.court+'</p>'
+    var isFirst=idx===0;
+    var statusChip='<span class="upcoming-chip-d">D-3</span>';
+    html+='<div class="upcoming-entry" data-id="'+m.id+'">'
+      +'<div class="upcoming-entry-info">'
+        +'<p class="upcoming-entry-dateline">'+m.day+' '+m.time+' '+statusChip+'</p>'
+        +'<p class="upcoming-venueline"><span class="upcoming-vname">'+m.venue+' '+m.court+'</span>'
+          +(m.price?'<span class="upcoming-chip-free">FREE</span>':'')
+        +'</p>'
       +'</div>'
-      +'<span style="display:flex;color:var(--mute)" data-icon="chevR" data-sz="16" data-color="#A0A6AC"></span>'
+      +(isFirst?'<button class="upcoming-depart">출발 체크</button>':'')
     +'</div>';
   });
-  if(rest>0) html+='<p class="upcoming-more">'+rest+'개의 매치가 더 있어요</p>';
+  html+='<hr class="upcoming-divider">';
+  html+='<p class="upcoming-more">'+(rest>0?rest+'개의 매치가 더 기다리고 있어요':'진행 예정 매치를 모두 확인했어요')+'</p>';
   html+='</div>';
   upcomingEl.innerHTML=html;
   upcomingEl.style.display='block';
-  upcomingEl.querySelectorAll('[data-icon]').forEach(function(el){
-    el.insertAdjacentHTML('afterbegin',svg(el.dataset.icon,+el.dataset.sz||16,el.dataset.color||'currentColor'));
-  });
-  upcomingEl.querySelectorAll('.upcoming-item').forEach(function(el){
-    el.addEventListener('click',function(){openDetail(+el.dataset.id);});
+  upcomingEl.querySelectorAll('.upcoming-entry').forEach(function(el){
+    el.addEventListener('click',function(e){
+      if(e.target.closest('.upcoming-depart'))return;
+      openDetail(+el.dataset.id);
+    });
   });
 }
 
