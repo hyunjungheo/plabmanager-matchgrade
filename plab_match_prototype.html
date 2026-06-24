@@ -463,7 +463,7 @@ function renderUpcoming(){
   if(!selectedIds.length){upcomingEl.style.display='none';return;}
   var show=selectedIds.slice(0,2);
   var rest=selectedIds.length-show.length;
-  var html='<div class="upcoming"><p class="upcoming-title">짱호두님의 진행 예정 매치</p>';
+  var html='<div class="upcoming"><p class="upcoming-title">이플랩님의 진행 예정 매치</p>';
   show.forEach(function(id,idx){
     var m=matches.find(function(x){return x.id===id;});
     if(!m)return;
@@ -605,14 +605,13 @@ document.getElementById('confirmAccept').addEventListener('click',function(){
   if(_pendingSuggMatch && selectedIds.indexOf(_pendingSuggMatch.id)<0){
     selectedIds.push(_pendingSuggMatch.id);
   }
+  /* closeDetail 전에 미리 저장 (closeDetail이 _pendingSugg를 초기화함) */
+  var pendingS=_pendingSugg;
   closeConfirm();
-  /* 상세 닫고 목록으로 */
   closeDetail();
   renderUpcoming();
-  /* 매치 선택 완료 후 추천 모달 표시 */
-  if(_pendingSugg){
-    var s=_pendingSugg; _pendingSugg=null;
-    setTimeout(function(){showSuggest(s);},500);
+  if(pendingS){
+    setTimeout(function(){showSuggest(pendingS);},500);
   }
 });
 
