@@ -198,7 +198,7 @@ td{color:#54585E} td.v{font-weight:600;color:#191A1C}
       <div class="sheet-hd"><span class="sheet-t">매치 상태 표시 안내</span><button class="sheet-x" data-close><span style="display:flex" data-icon="close" data-sz="22" data-color="#191A1C"></span></button></div>
       <p class="sheet-sub">매치 카드 오른쪽에 표시되는 마크의 의미예요.</p>
       <div class="sheet-bd">
-        <div class="lrow"><span class="lmark"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" style="display:block"><path d="M8.93569 21L3 15.0643L3.84796 14.2164L9.78364 20.152L8.93569 21Z" fill="#FF894A"/><path d="M10.6316 19.3041L4.69591 13.3684L7.23978 10.8245L13.1755 16.7602L10.6316 19.3041Z" fill="#FF894A"/><path d="M21 16.9532L16.9913 12.9444L14.0234 15.9123L8.08773 9.97658L11.0556 7.00874L7.04683 3H21V16.9532Z" fill="#FF894A"/></svg></span><div><p class="lname">진행 유력</p><p class="ldesc">최근 2개월 간 진행이 많이 된 매치예요. 진행 가능성이 높을수록 화살표 꼬리선이 많아져요.</p></div></div>
+        <div class="lrow"><span class="lmark"><svg viewBox="0 0 21 25" width="20" height="24" fill="none" style="display:block"><path d="M20.9087 21.5135L17.9503 18.5551L15.7601 20.7454L11.3797 16.3649L13.5699 14.1747L10.6115 11.2163H20.9087V21.5135Z" fill="#FF894A"/><path d="M12.0055 24.5L10.9104 23.4049L9.81526 22.3098L7.62504 20.1196L8.25082 19.4938L9.34592 20.5889L10.441 21.684L12.6312 23.8742L12.0055 24.5Z" fill="#FF894A"/><path d="M13.2521 23.2483L8.87165 18.8679L10.749 16.9906L12.9392 19.1808L15.1294 21.371L13.2521 23.2483Z" fill="#FF894A"/><path d="M18 13.9532L13.9913 9.94443L11.0234 12.9123L5.08774 6.97658L8.05558 4.00874L4.04684 0H18V13.9532Z" fill="#FF894A"/><path d="M5.93568 18L0 12.0643L0.847954 11.2163L6.78365 17.152L5.93568 18Z" fill="#FF894A"/><path d="M7.6249 16.3039L1.68922 10.3682L4.23308 7.82438L7.20093 10.7922L10.1688 13.7601L7.6249 16.3039Z" fill="#FF894A"/></svg></span><div><p class="lname">진행 유력</p><p class="ldesc">최근 2개월 간 진행이 많이 된 매치예요. 화살표가 많을수록 진행 확률이 높아요.</p></div></div>
         <div class="lrow"><span class="lmark"><span class="lbl-n">N</span></span><div><p class="lname">신규</p><p class="ldesc">최근에 새로 열린 매치예요.</p></div></div>
         <div class="lrow"><span class="lmark"><span class="lbl-cf">확정</span></span><div><p class="lname">확정</p><p class="ldesc">최소 인원이 모여 진행이 확정된 매치예요.</p></div></div>
       </div>
@@ -329,16 +329,15 @@ function pct(m){return m.prob!=null?Math.round(m.prob*100)+'%':'데이터 없음
 function upArrow(sz,strong){
   if(strong==null)strong=true;
   if(strong){
-    /* s1·a1: 화살표 2개 (25×27) — 기준 크기 sz */
-    var szH=Math.round(sz*27/25);
-    return '<svg width="'+sz+'" height="'+szH+'" viewBox="0 0 25 27" fill="none" style="display:block;flex:none">'
-      +'<path d="M14.1402 25.2732L8.20448 19.3375L10.7483 16.7936L16.684 22.7293L14.1402 25.2732Z" fill="#FF894A"/>'
-      +'<path d="M24.5086 22.9223L20.4998 18.9135L17.532 21.8814L11.5963 15.9457L14.5641 12.9778L10.5554 8.9691H24.5086V22.9223Z" fill="#FF894A"/>'
-      +'<path d="M12.4442 26.9691L6.50856 21.0334L7.35652 20.1854L13.2922 26.1211L12.4442 26.9691Z" fill="#FF894A"/>'
-      +'<path d="M14.1335 25.273L8.19778 19.3373L10.7416 16.7935L13.7095 19.7613L16.6773 22.7292L14.1335 25.273Z" fill="#FF894A"/>'
-      +'<path d="M17.9997 13.9532L13.9909 9.94443L11.0231 12.9123L5.08742 6.97658L8.05525 4.00874L4.04652 0H17.9997V13.9532Z" fill="#FF894A"/>'
-      +'<path d="M5.93536 18L-0.000322342 12.0643L0.847631 11.2163L6.78332 17.152L5.93536 18Z" fill="#FF894A"/>'
-      +'<path d="M7.62458 16.3039L1.6889 10.3682L4.23276 7.82438L7.2006 10.7922L10.1684 13.7601L7.62458 16.3039Z" fill="#FF894A"/>'
+    /* s1·a1: 이중 화살표 (21×25) */
+    var szH=Math.round(sz*25/21);
+    return '<svg width="'+sz+'" height="'+szH+'" viewBox="0 0 21 25" fill="none" style="display:block;flex:none">'
+      +'<path d="M20.9087 21.5135L17.9503 18.5551L15.7601 20.7454L11.3797 16.3649L13.5699 14.1747L10.6115 11.2163H20.9087V21.5135Z" fill="#FF894A"/>'
+      +'<path d="M12.0055 24.5L10.9104 23.4049L9.81526 22.3098L7.62504 20.1196L8.25082 19.4938L9.34592 20.5889L10.441 21.684L12.6312 23.8742L12.0055 24.5Z" fill="#FF894A"/>'
+      +'<path d="M13.2521 23.2483L8.87165 18.8679L10.749 16.9906L12.9392 19.1808L15.1294 21.371L13.2521 23.2483Z" fill="#FF894A"/>'
+      +'<path d="M18 13.9532L13.9913 9.94443L11.0234 12.9123L5.08774 6.97658L8.05558 4.00874L4.04684 0H18V13.9532Z" fill="#FF894A"/>'
+      +'<path d="M5.93568 18L0 12.0643L0.847954 11.2163L6.78365 17.152L5.93568 18Z" fill="#FF894A"/>'
+      +'<path d="M7.6249 16.3039L1.68922 10.3682L4.23308 7.82438L7.20093 10.7922L10.1688 13.7601L7.6249 16.3039Z" fill="#FF894A"/>'
       +'</svg>';
   }else{
     /* a2·a3: 화살표 1개 (18×18) — 이중보다 작게: sz * 0.78 */
