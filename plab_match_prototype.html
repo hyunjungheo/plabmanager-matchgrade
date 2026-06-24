@@ -79,8 +79,10 @@ body{background:var(--page);font-family:Pretendard,-apple-system,BlinkMacSystemF
 .sheet-btn-row{display:flex;gap:10px;margin-top:6px}
 .sheet-btn-row .btn-sub{flex:1;padding:14px;border:1px solid var(--bd);border-radius:12px;background:#fff;font-size:15px;font-weight:600;color:#54585E;cursor:pointer}
 .sheet-btn-row .btn-main{flex:1;padding:14px;border:none;border-radius:12px;background:#191A1C;color:#fff;font-size:15px;font-weight:700;cursor:pointer}
-.conf-warn{font-size:14px;color:#191A1C;line-height:1.65;margin:12px 0 16px}
-.conf-warn strong{color:#E5392E}
+.conf-warn-title{font-size:14px;font-weight:700;color:#E5392E;margin:14px 0 3px}
+.conf-warn-sub{font-size:14px;color:#191A1C;line-height:1.65;margin:0 0 14px}
+.conf-callout{background:#F7F8FA;border-radius:12px;padding:14px 16px;margin-bottom:16px;text-align:center}
+.conf-callout p{font-size:15px;font-weight:600;color:#191A1C;line-height:1.7;margin:0}
 .conf-list{margin:0 0 20px;padding:0;list-style:none}
 .conf-list li{font-size:14.5px;color:#54585E;padding:5px 0 5px 16px;position:relative}
 .conf-list li::before{content:"·";position:absolute;left:4px;color:#9AA0A6;font-size:16px}
@@ -213,8 +215,9 @@ td{color:#54585E} td.v{font-weight:600;color:#191A1C}
         <span class="sheet-t">매치 선택 주의사항</span>
         <button class="sheet-x" id="confirmClose"><span style="display:flex" data-icon="close" data-sz="22" data-color="#191A1C"></span></button>
       </div>
-      <p class="conf-warn"><strong>한 번 선택한 매치는 취소할 수 없어요.</strong> 선택한 구장과 일정을 다시 한 번 확인해 주세요.</p>
-      <ul class="conf-list" id="confirmList"></ul>
+      <p class="conf-warn-title">한 번 선택한 매치는 취소할 수 없어요.</p>
+      <p class="conf-warn-sub">선택한 구장과 일정을 다시 한 번 확인해 주세요.</p>
+      <div class="conf-callout" id="confirmCallout"></div>
       <div id="confirmFixedNotes" style="display:none;background:#FFF8F0;border:1px solid #FFD6B0;border-radius:11px;padding:13px 14px;margin-bottom:18px">
         <ul class="conf-list" style="margin:0;color:#B45309">
           <li>고정 매치는 매주 같은 요일, 같은 시간 매치에 배정돼요.</li>
@@ -222,7 +225,10 @@ td{color:#54585E} td.v{font-weight:600;color:#191A1C}
         </ul>
       </div>
       <label class="no-show-label"><input type="checkbox" id="confirmNoShow"> 하루동안 보지 않기</label>
-      <button class="sheet-cta" id="confirmAccept">신청하기</button>
+      <div class="sheet-btn-row">
+        <button class="btn-sub" id="confirmCancel">취소</button>
+        <button class="btn-main" id="confirmAccept">신청하기</button>
+      </div>
     </div>
   </div>
   <div class="ovl" id="suggestModal">
@@ -604,8 +610,8 @@ function shouldShowConf(){
 }
 function openConfirm(m,isFixed){
   var dayLabel=isFixed?('매주 '+m.day.split(' ').pop()+' '+m.time):m.day+' '+m.time;
-  document.getElementById('confirmList').innerHTML=
-    '<li>'+dayLabel+' · '+m.venue+' '+m.court+'</li>';
+  document.getElementById('confirmCallout').innerHTML=
+    '<p>'+dayLabel+'</p><p>'+m.venue+' '+m.court+'</p>';
   document.getElementById('confirmFixedNotes').style.display=isFixed?'block':'none';
   var chk=document.getElementById('confirmNoShow');
   if(chk) chk.checked=false;
@@ -617,6 +623,7 @@ function openConfirm(m,isFixed){
 }
 function closeConfirm(){confM.classList.remove('open');}
 document.getElementById('confirmClose').addEventListener('click',closeConfirm);
+document.getElementById('confirmCancel').addEventListener('click',closeConfirm);
 confM.addEventListener('click',function(e){if(e.target===confM)closeConfirm();});
 document.getElementById('confirmAccept').addEventListener('click',function(){
   var chk=document.getElementById('confirmNoShow');
