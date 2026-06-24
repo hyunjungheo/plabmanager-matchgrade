@@ -329,8 +329,8 @@ function pct(m){return m.prob!=null?Math.round(m.prob*100)+'%':'데이터 없음
 function upArrow(sz,strong){
   if(strong==null)strong=true;
   if(strong){
-    /* s1·a1: 왼쪽 이모지 — viewBox 4 3 18 18로 center arrow 크기를 오른쪽과 동일하게 */
-    return '<svg width="'+sz+'" height="'+sz+'" viewBox="4 3 18 18" fill="none" style="display:block;flex:none">'
+    /* s1·a1: 왼쪽 이모지 — viewBox 0 2 23 23 (전체 콘텐츠 0~22.83 / 2~24.93 포함) */
+    return '<svg width="'+sz+'" height="'+sz+'" viewBox="0 2 23 23" fill="none" style="display:block;flex:none">'
       +'<path d="M3.60588 11.9304L0 8.33333L0.333333 8L2.27254 9.93042L3.93921 11.5971L3.60588 11.9304Z" fill="#FFA97C"/>'
       +'<path d="M9.83203 10L7.53363 7.7016L5.83203 9.40321L2.42883 6L4.13043 4.2984L1.83203 2H9.83203V10Z" fill="#FFA97C"/>'
       +'<path d="M4.36133 10.9759L0.861328 7.51449L1.36133 7.0255L1.86133 6.5255L5.36133 9.97594L4.86133 10.4759L4.36133 10.9759Z" fill="#FFA97C"/>'
@@ -342,8 +342,8 @@ function upArrow(sz,strong){
       +'<path d="M22 16.9532L17.9913 12.9444L15.0234 15.9123L12.0556 12.9444L9.08773 9.97658L12.0556 7.00874L8.04683 3H22V16.9532Z" fill="#FF894A"/>'
       +'</svg>';
   }else{
-    /* a2·a3: 오른쪽 이모지 */
-    return '<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 18 18" fill="none" style="display:block;flex:none">'
+    /* a2·a3: 오른쪽 이모지 — viewBox -3 -2 23 23 (center arrow = 왼쪽과 동일 14/23×sz) */
+    return '<svg width="'+sz+'" height="'+sz+'" viewBox="-3 -2 23 23" fill="none" style="display:block;flex:none">'
       +'<path d="M5.93569 18L0 12.0643L0.847955 11.2164L6.78364 17.152L5.93569 18Z" fill="#FF894A"/>'
       +'<path d="M7.6316 16.3041L1.69591 10.3684L4.23978 7.82454L10.1755 13.7602L7.6316 16.3041Z" fill="#FF894A"/>'
       +'<path d="M18 13.9532L13.9913 9.94443L11.0234 12.9123L8.05557 9.94443L5.08773 6.97658L8.05557 4.00874L4.04683 0H18V13.9532Z" fill="#FF894A"/>'
