@@ -550,8 +550,10 @@ function getSuggestion(m){
 /* ── 추천 모달 ── */
 var suggestM=document.getElementById('suggestModal');
 var _currentSugg=null;
-function showSuggest(sugg){
+var _currentSuggOrigM=null; /* 추천 모달을 띄운 원본 매치 */
+function showSuggest(sugg,origM){
   _currentSugg=sugg;
+  _currentSuggOrigM=origM||null;
   document.getElementById('suggestTitle').textContent=sugg.title.replace('\n',' ');
   document.getElementById('suggestDesc').textContent=sugg.desc;
   document.getElementById('suggestCard').innerHTML=
@@ -566,10 +568,20 @@ document.getElementById('suggestClose').addEventListener('click',closeSuggest);
 document.getElementById('suggestDismiss').addEventListener('click',closeSuggest);
 suggestM.addEventListener('click',function(e){if(e.target===suggestM)closeSuggest();});
 document.getElementById('suggestAccept').addEventListener('click',function(){
+  var sugg=_currentSugg, origM=_currentSuggOrigM;
   closeSuggest();
-  if(_currentSugg && _currentSugg.type==='fixed' && _pendingSuggMatch){
-    setTimeout(function(){openConfirm(_pendingSuggMatch,true);},300);
-  }
+  if(!sugg) return;
+  setTimeout(function(){
+    if(sugg.type==='fixed' && origM){
+      openConfirm(origM,true);
+    } else {
+      /* next 타입: 추천 매치 정보로 합성 객체 구성 */
+      var synthM=origM
+        ? {day:origM.day, time:sugg.time, venue:sugg.venue, court:sugg.court}
+        : {day:'', time:sugg.time, venue:sugg.venue, court:sugg.court};
+      openConfirm(synthM,false);
+    }
+  },300);
 });
 
 /* ── 확인 모달 ── */
@@ -605,13 +617,14 @@ document.getElementById('confirmAccept').addEventListener('click',function(){
   if(_pendingSuggMatch && selectedIds.indexOf(_pendingSuggMatch.id)<0){
     selectedIds.push(_pendingSuggMatch.id);
   }
-  /* closeDetail 전에 미리 저장 (closeDetail이 _pendingSugg를 초기화함) */
+  /* closeDetail 전에 미리 저장 (closeDetail이 _pendingSugg·_pendingSuggMatch를 초기화함) */
   var pendingS=_pendingSugg;
+  var pendingM=_pendingSuggMatch;
   closeConfirm();
   closeDetail();
   renderUpcoming();
   if(pendingS){
-    setTimeout(function(){showSuggest(pendingS);},500);
+    setTimeout(function(){showSuggest(pendingS,pendingM);},500);
   }
 });
 
