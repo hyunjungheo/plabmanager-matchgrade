@@ -573,7 +573,8 @@ function showSuggest(sugg,origM){
   var dayLabel=origM?origM.day+' '+sugg.time:sugg.time;
   document.getElementById('suggestCard').innerHTML=
     '<p class="sc-time">'+dayLabel+'</p>'+
-    '<p class="sc-venue">'+sugg.venue+'</p>';
+    '<p class="sc-venue">'+sugg.venue+'</p>'+
+    '<p class="sc-info">'+sugg.court+' · '+sugg.fmt+' · '+sugg.gender+'</p>';
   suggestM.classList.add('open');
 }
 function closeSuggest(){suggestM.classList.remove('open');}
