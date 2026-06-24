@@ -72,9 +72,9 @@ body{background:var(--page);font-family:Pretendard,-apple-system,BlinkMacSystemF
 .no-show-label{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--sub);margin-bottom:12px;cursor:pointer;user-select:none}
 .no-show-label input{width:16px;height:16px;accent-color:#191A1C;cursor:pointer;flex:none}
 .sugg-tag{display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:3px 9px;border-radius:5px;background:#FFF0E6;color:#EA6A1E;margin-bottom:10px}
-.sugg-card{background:#F7F8FA;border:1px solid var(--bd);border-radius:13px;padding:14px 15px;margin:4px 0 16px}
-.sugg-card .sc-time{font-size:20px;font-weight:700;letter-spacing:-.3px;margin:0 0 4px}
-.sugg-card .sc-venue{font-size:14.5px;font-weight:600;margin:0 0 2px}
+.sugg-card{background:#F7F8FA;border:1px solid var(--bd);border-radius:13px;padding:14px 15px;margin:4px 0 16px;text-align:center}
+.sugg-card .sc-time{font-size:15px;font-weight:600;letter-spacing:-.3px;margin:0;color:#191A1C;line-height:1.7}
+.sugg-card .sc-venue{font-size:15px;font-weight:600;margin:0;color:#191A1C;line-height:1.7}
 .sugg-card .sc-info{font-size:13px;color:var(--sub);margin:0}
 .sheet-btn-row{display:flex;gap:10px;margin-top:6px}
 .sheet-btn-row .btn-sub{flex:1;padding:14px;border:1px solid var(--bd);border-radius:12px;background:#fff;font-size:15px;font-weight:600;color:#54585E;cursor:pointer}
@@ -570,11 +570,10 @@ function showSuggest(sugg,origM){
   _currentSuggOrigM=origM||null;
   document.getElementById('suggestTitle').textContent=sugg.title.replace('\n',' ');
   document.getElementById('suggestDesc').textContent=sugg.desc;
+  var dayLabel=origM?origM.day+' '+sugg.time:sugg.time;
   document.getElementById('suggestCard').innerHTML=
-    '<span class="sugg-tag">'+sugg.tag+'</span>'+
-    '<p class="sc-time">'+sugg.time+'</p>'+
-    '<p class="sc-venue">'+sugg.venue+' · '+sugg.court+'</p>'+
-    '<p class="sc-info">'+sugg.fmt+' · '+sugg.gender+'</p>';
+    '<p class="sc-time">'+dayLabel+'</p>'+
+    '<p class="sc-venue">'+sugg.venue+'</p>';
   suggestM.classList.add('open');
 }
 function closeSuggest(){suggestM.classList.remove('open');}
