@@ -198,7 +198,7 @@ td{color:#54585E} td.v{font-weight:600;color:#191A1C}
       <div class="sheet-hd"><span class="sheet-t">매치 상태 표시 안내</span><button class="sheet-x" data-close><span style="display:flex" data-icon="close" data-sz="22" data-color="#191A1C"></span></button></div>
       <p class="sheet-sub">매치 카드 오른쪽에 표시되는 마크의 의미예요.</p>
       <div class="sheet-bd">
-        <div class="lrow"><span class="lmark"><svg viewBox="0 0 21 25" width="20" height="24" fill="none" style="display:block"><path d="M20.9087 21.5135L17.9503 18.5551L15.7601 20.7454L11.3797 16.3649L13.5699 14.1747L10.6115 11.2163H20.9087V21.5135Z" fill="#FF894A"/><path d="M12.0055 24.5L10.9104 23.4049L9.81526 22.3098L7.62504 20.1196L8.25082 19.4938L9.34592 20.5889L10.441 21.684L12.6312 23.8742L12.0055 24.5Z" fill="#FF894A"/><path d="M13.2521 23.2483L8.87165 18.8679L10.749 16.9906L12.9392 19.1808L15.1294 21.371L13.2521 23.2483Z" fill="#FF894A"/><path d="M18 13.9532L13.9913 9.94443L11.0234 12.9123L5.08774 6.97658L8.05558 4.00874L4.04684 0H18V13.9532Z" fill="#FF894A"/><path d="M5.93568 18L0 12.0643L0.847954 11.2163L6.78365 17.152L5.93568 18Z" fill="#FF894A"/><path d="M7.6249 16.3039L1.68922 10.3682L4.23308 7.82438L7.20093 10.7922L10.1688 13.7601L7.6249 16.3039Z" fill="#FF894A"/></svg></span><div><p class="lname">진행 유력</p><p class="ldesc">최근 2개월 간 진행이 많이 된 매치예요. 화살표가 많을수록 진행 확률이 높아요.</p></div></div>
+        <div class="lrow"><span class="lmark"><svg viewBox="0 0 23 26" width="20" height="23" fill="none" style="display:block"><path d="M22.1553 22.7601L19.1969 19.8018L17.0067 21.992L12.6263 17.6115L14.8165 15.4213L11.8581 12.463H22.1553V22.7601Z" fill="#FF894A"/><path d="M13.2521 25.7466L12.157 24.6515L11.0619 23.5564L8.87165 21.3662L9.49743 20.7404L10.5925 21.8355L11.6876 22.9306L13.8779 25.1208L13.2521 25.7466Z" fill="#FF894A"/><path d="M14.4987 24.495L10.1183 20.1145L11.9956 18.2372L14.1858 20.4274L16.376 22.6176L14.4987 24.495Z" fill="#FF894A"/><path d="M18 13.9532L13.9913 9.94443L11.0234 12.9123L5.08774 6.97658L8.05558 4.00874L4.04684 0H18V13.9532Z" fill="#FF894A"/><path d="M5.93568 18L0 12.0643L0.847954 11.2163L6.78365 17.152L5.93568 18Z" fill="#FF894A"/><path d="M7.6249 16.3039L1.68922 10.3682L4.23308 7.82438L7.20093 10.7922L10.1688 13.7601L7.6249 16.3039Z" fill="#FF894A"/></svg></span><div><p class="lname">진행 유력</p><p class="ldesc">최근 2개월 간 진행이 많이 된 매치예요. 화살표가 많을수록 진행 확률이 높아요.</p></div></div>
         <div class="lrow"><span class="lmark"><span class="lbl-n">N</span></span><div><p class="lname">신규</p><p class="ldesc">최근에 새로 열린 매치예요.</p></div></div>
         <div class="lrow"><span class="lmark"><span class="lbl-cf">확정</span></span><div><p class="lname">확정</p><p class="ldesc">최소 인원이 모여 진행이 확정된 매치예요.</p></div></div>
       </div>
@@ -329,12 +329,12 @@ function pct(m){return m.prob!=null?Math.round(m.prob*100)+'%':'데이터 없음
 function upArrow(sz,strong){
   if(strong==null)strong=true;
   if(strong){
-    /* s1·a1: 이중 화살표 (21×25) */
-    var szH=Math.round(sz*25/21);
-    return '<svg width="'+sz+'" height="'+szH+'" viewBox="0 0 21 25" fill="none" style="display:block;flex:none">'
-      +'<path d="M20.9087 21.5135L17.9503 18.5551L15.7601 20.7454L11.3797 16.3649L13.5699 14.1747L10.6115 11.2163H20.9087V21.5135Z" fill="#FF894A"/>'
-      +'<path d="M12.0055 24.5L10.9104 23.4049L9.81526 22.3098L7.62504 20.1196L8.25082 19.4938L9.34592 20.5889L10.441 21.684L12.6312 23.8742L12.0055 24.5Z" fill="#FF894A"/>'
-      +'<path d="M13.2521 23.2483L8.87165 18.8679L10.749 16.9906L12.9392 19.1808L15.1294 21.371L13.2521 23.2483Z" fill="#FF894A"/>'
+    /* s1·a1: 이중 화살표 (23×26) */
+    var szH=Math.round(sz*26/23);
+    return '<svg width="'+sz+'" height="'+szH+'" viewBox="0 0 23 26" fill="none" style="display:block;flex:none">'
+      +'<path d="M22.1553 22.7601L19.1969 19.8018L17.0067 21.992L12.6263 17.6115L14.8165 15.4213L11.8581 12.463H22.1553V22.7601Z" fill="#FF894A"/>'
+      +'<path d="M13.2521 25.7466L12.157 24.6515L11.0619 23.5564L8.87165 21.3662L9.49743 20.7404L10.5925 21.8355L11.6876 22.9306L13.8779 25.1208L13.2521 25.7466Z" fill="#FF894A"/>'
+      +'<path d="M14.4987 24.495L10.1183 20.1145L11.9956 18.2372L14.1858 20.4274L16.376 22.6176L14.4987 24.495Z" fill="#FF894A"/>'
       +'<path d="M18 13.9532L13.9913 9.94443L11.0234 12.9123L5.08774 6.97658L8.05558 4.00874L4.04684 0H18V13.9532Z" fill="#FF894A"/>'
       +'<path d="M5.93568 18L0 12.0643L0.847954 11.2163L6.78365 17.152L5.93568 18Z" fill="#FF894A"/>'
       +'<path d="M7.6249 16.3039L1.68922 10.3682L4.23308 7.82438L7.20093 10.7922L10.1688 13.7601L7.6249 16.3039Z" fill="#FF894A"/>'
