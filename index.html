@@ -521,7 +521,7 @@ function getSuggestion(m){
     return {
       type:'next',
       tag:'같은 구장 · 다음 타임',
-      title:'같은 구장 다음 타임에 매니저가 필요해요',
+      title:'다음 타임에 매니저가 필요해요',
       desc:'선택한 매치 바로 다음 시간대('+nextTime+')에 매니저가 배정되지 않았어요.',
       time:nextTime,
       venue:m.venue,
@@ -549,7 +549,7 @@ function getSuggestion(m){
       return {
         type:'fixed',
         tag:'같은 시간 · 고정 매치',
-        title:'같은 구장 다음 타임에 매니저가 필요해요',
+        title:'다음 타임에 매니저가 필요해요',
         desc:'같은 구장의 고정 매치에 매니저가 배정되어 있지 않아요.',
         time:'매주 '+m.day.split(' ').pop()+' '+m.time,
         venue:m.venue,
@@ -561,7 +561,7 @@ function getSuggestion(m){
     return {
       type:'next',
       tag:'같은 구장 · 다음 타임',
-      title:'같은 구장 다음 타임에 매니저가 필요해요',
+      title:'다음 타임에 매니저가 필요해요',
       desc:'선택한 매치 바로 다음 시간대('+nextTime+')에 매니저가 배정되지 않았어요.',
       time:nextTime,
       venue:m.venue,
@@ -589,8 +589,12 @@ function showSuggest(sugg,origM){
   document.getElementById('suggestDesc').textContent=descText;
   var cardFmt=(sugg.fmt||origM&&origM.fmt)||'';
   var cardGender=(sugg.gender||origM&&origM.gender)||'';
-  function fmtDay(d){var p=d.split(' ');return p.length>=2?p[0]+'('+p[1].charAt(0)+') ':d+' ';}
-  var origLine=origM?fmtDay(origM.day)+origM.time+' '+origM.venue+' '+origM.court:'';
+  function fmtDay(d){var p=d.split(' ');return p.length>=3?p[0]+' '+p[1]+'('+p[2].charAt(0)+') ':p.length>=2?p[0]+'('+p[1].charAt(0)+') ':d+' ';}
+  var origLine=origM
+    ?(sugg.type==='next'
+      ?origM.time+' '+origM.venue+' '+origM.court
+      :fmtDay(origM.day)+origM.time+' '+origM.venue+' '+origM.court)
+    :'';
   document.getElementById('suggestCard').innerHTML=
     (origM?'<div class="sc-row"><span class="sc-lbl">내가 선택한 매치</span><span class="sc-val">'+origLine+'</span></div>':'')+
     '<div class="sc-row"><span class="sc-lbl sc-lbl-need">매니저가 필요한 매치</span><span class="sc-val">'+sugg.time+' '+sugg.venue+' '+sugg.court+'</span></div>';
