@@ -72,9 +72,12 @@ body{background:var(--page);font-family:Pretendard,-apple-system,BlinkMacSystemF
 .no-show-label{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--sub);margin-bottom:12px;cursor:pointer;user-select:none}
 .no-show-label input{width:16px;height:16px;accent-color:#191A1C;cursor:pointer;flex:none}
 .sugg-tag{display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:3px 9px;border-radius:5px;background:#FFF0E6;color:#EA6A1E;margin-bottom:10px}
-.sugg-card{background:#F7F8FA;border:1px solid var(--bd);border-radius:13px;padding:14px 15px;margin:4px 0 16px;text-align:center}
-.sugg-card .sc-time{font-size:15px;font-weight:600;letter-spacing:-.3px;margin:0;color:#191A1C;line-height:1.7}
-.sugg-card .sc-venue{font-size:15px;font-weight:600;margin:0;color:#191A1C;line-height:1.7}
+.sugg-card{background:#F7F8FA;border:1px solid var(--bd);border-radius:13px;padding:4px 15px;margin:4px 0 16px}
+.sc-row{display:flex;align-items:center;gap:10px;padding:11px 0}
+.sc-row+.sc-row{border-top:1px solid #ECEEF0}
+.sc-lbl{font-size:11px;font-weight:600;color:#A0A6AC;white-space:nowrap;flex:none}
+.sc-lbl-need{color:#FF894A}
+.sc-val{font-size:14.5px;font-weight:700;color:#191A1C;letter-spacing:-.2px}
 .sugg-card .sc-info{font-size:13px;color:var(--sub);margin:0}
 .sheet-btn-row{display:flex;gap:10px;margin-top:6px}
 .sheet-btn-row .btn-sub{flex:1;padding:14px;border:1px solid var(--bd);border-radius:12px;background:#fff;font-size:15px;font-weight:600;color:#54585E;cursor:pointer}
@@ -578,10 +581,10 @@ function showSuggest(sugg,origM){
   document.getElementById('suggestDesc').textContent=descText;
   var cardFmt=(sugg.fmt||origM&&origM.fmt)||'';
   var cardGender=(sugg.gender||origM&&origM.gender)||'';
+  var origLine=origM?origM.time+' '+origM.venue+' '+origM.court:'';
   document.getElementById('suggestCard').innerHTML=
-    '<p class="sc-time">'+sugg.time+'</p>'+
-    '<p class="sc-time">'+sugg.venue+' '+sugg.court+'</p>'+
-    (cardFmt||cardGender?'<p class="sc-info">'+(cardFmt&&cardGender?cardFmt+' · '+cardGender:cardFmt||cardGender)+'</p>':'');
+    (origM?'<div class="sc-row"><span class="sc-lbl">내가 선택한 매치</span><span class="sc-val">'+origLine+'</span></div>':'')+
+    '<div class="sc-row"><span class="sc-lbl sc-lbl-need">매니저가 필요한 매치</span><span class="sc-val">'+sugg.time+' '+sugg.venue+' '+sugg.court+'</span></div>';
   suggestM.classList.add('open');
 }
 function closeSuggest(){suggestM.classList.remove('open');}
@@ -616,7 +619,7 @@ function shouldShowConf(){
   return true;
 }
 function openConfirm(m,isFixed){
-  var dayLabel=isFixed?('매주 '+m.day.split(' ').pop()+' · '+m.time):m.day+' · '+m.time;
+  var dayLabel=isFixed?('매주 '+m.day.split(' ').pop()+' '+m.time):m.day+' '+m.time;
   document.getElementById('confirmCallout').innerHTML=
     '<p class="cc-main">'+dayLabel+'</p>'+
     '<p class="cc-main">'+m.venue+' '+m.court+'</p>'+
