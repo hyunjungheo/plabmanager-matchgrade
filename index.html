@@ -199,7 +199,7 @@ td{color:#54585E} td.v{font-weight:600;color:#191A1C}
       <div class="sheet-hd"><span class="sheet-t">매치 상태 표시 안내</span><button class="sheet-x" data-close><span style="display:flex" data-icon="close" data-sz="22" data-color="#191A1C"></span></button></div>
       <p class="sheet-sub">매치 카드 오른쪽에 표시되는 마크의 의미예요.</p>
       <div class="sheet-bd">
-        <div class="lrow"><span class="lmark"><svg viewBox="0 0 23 27" width="20" height="23" fill="none" style="display:block"><path d="M22.7811 23.3859L19.8227 20.4275L17.6325 22.6177L13.2521 18.2373L15.4423 16.0471L12.4839 13.0887H22.7811V23.3859Z" fill="#FF894A"/><path d="M13.8779 26.3724L12.7827 25.2773L11.6876 24.1822L9.49743 21.992L10.1232 21.3662L11.2183 22.4613L12.3134 23.5564L14.5036 25.7466L13.8779 26.3724Z" fill="#FF894A"/><path d="M15.1245 25.1207L10.744 20.7403L12.6214 18.863L14.8116 21.0532L17.0018 23.2434L15.1245 25.1207Z" fill="#FF894A"/><path d="M18 13.9532L13.9913 9.94443L11.0234 12.9123L5.08774 6.97658L8.05558 4.00874L4.04684 0H18V13.9532Z" fill="#FF894A"/><path d="M5.93568 18L0 12.0643L0.847954 11.2163L6.78365 17.152L5.93568 18Z" fill="#FF894A"/><path d="M7.6249 16.3039L1.68922 10.3682L4.23308 7.82438L7.20093 10.7922L10.1688 13.7601L7.6249 16.3039Z" fill="#FF894A"/></svg></span><div><p class="lname">진행 유력</p><p class="ldesc">최근 2개월 간 진행이 많이 된 매치예요. 화살표가 많을수록 진행 확률이 높아요.</p></div></div>
+        <div class="lrow"><span class="lmark"><svg viewBox="0 0 23 27" width="20" height="23" fill="none" style="display:block"><path d="M22.7811 23.3859L19.8227 20.4275L17.6325 22.6177L13.2521 18.2373L15.4423 16.0471L12.4839 13.0887H22.7811V23.3859Z" fill="#FF894A"/><path d="M13.8779 26.3724L12.7827 25.2773L11.6876 24.1822L9.49743 21.992L10.1232 21.3662L11.2183 22.4613L12.3134 23.5564L14.5036 25.7466L13.8779 26.3724Z" fill="#FF894A"/><path d="M15.1245 25.1207L10.744 20.7403L12.6214 18.863L14.8116 21.0532L17.0018 23.2434L15.1245 25.1207Z" fill="#FF894A"/><path d="M18 13.9532L13.9913 9.94443L11.0234 12.9123L5.08774 6.97658L8.05558 4.00874L4.04684 0H18V13.9532Z" fill="#FF894A"/><path d="M5.93568 18L0 12.0643L0.847954 11.2163L6.78365 17.152L5.93568 18Z" fill="#FF894A"/><path d="M7.6249 16.3039L1.68922 10.3682L4.23308 7.82438L7.20093 10.7922L10.1688 13.7601L7.6249 16.3039Z" fill="#FF894A"/></svg></span><div><p class="lname">진행 유력</p><p class="ldesc">최근 2개월 간 진행이 많이 된 매치예요.<br>화살표가 많을수록 진행 확률이 높아요.</p></div></div>
         <div class="lrow"><span class="lmark"><span class="lbl-n">N</span></span><div><p class="lname">신규</p><p class="ldesc">최근에 새로 열린 매치예요.</p></div></div>
         <div class="lrow"><span class="lmark"><span class="lbl-cf">확정</span></span><div><p class="lname">확정</p><p class="ldesc">최소 인원이 모여 진행이 확정된 매치예요.</p></div></div>
       </div>
@@ -622,10 +622,7 @@ var CONF_KEY='plab_conf_hide_until';
 var _pendingSugg=null;
 var _pendingSuggMatch=null;
 var selectedIds=[];
-function shouldShowConf(){
-  try{localStorage.removeItem(CONF_KEY);}catch(e){}
-  return true;
-}
+function shouldShowConf(){return false;}
 function openConfirm(m,isFixed){
   var dayLabel=isFixed?('매주 '+m.day.split(' ').pop()+' '+m.time):m.day+' '+m.time;
   document.getElementById('confirmCallout').innerHTML=
