@@ -618,11 +618,14 @@ document.getElementById('suggestAccept').addEventListener('click',function(){
 
 /* ── 확인 모달 ── */
 var confM=document.getElementById('confirmModal');
-var CONF_KEY='plab_conf_hide_until';
+var CONF_KEY='plab_conf_hide_until_v2';
 var _pendingSugg=null;
 var _pendingSuggMatch=null;
 var selectedIds=[];
-function shouldShowConf(){return false;}
+function shouldShowConf(){
+  try{var u=localStorage.getItem(CONF_KEY);if(u&&Date.now()<+u)return false;}catch(e){}
+  return true;
+}
 function openConfirm(m,isFixed){
   var dayLabel=isFixed?('매주 '+m.day.split(' ').pop()+' '+m.time):m.day+' '+m.time;
   document.getElementById('confirmCallout').innerHTML=
