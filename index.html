@@ -572,10 +572,12 @@ function showSuggest(sugg,origM){
   document.getElementById('suggestTitle').textContent=sugg.title.replace('\n',' ');
   document.getElementById('suggestDesc').textContent=sugg.desc;
   var dayLabel=origM?origM.day+' · '+sugg.time:sugg.time;
+  var cardFmt=(sugg.fmt||origM&&origM.fmt)||'';
+  var cardGender=(sugg.gender||origM&&origM.gender)||'';
   document.getElementById('suggestCard').innerHTML=
     '<p class="sc-time">'+dayLabel+'</p>'+
     '<p class="sc-time">'+sugg.venue+' '+sugg.court+'</p>'+
-    '<p class="sc-info">'+sugg.fmt+' · '+sugg.gender+'</p>';
+    (cardFmt||cardGender?'<p class="sc-info">'+(cardFmt&&cardGender?cardFmt+' · '+cardGender:cardFmt||cardGender)+'</p>':'');
   suggestM.classList.add('open');
 }
 function closeSuggest(){suggestM.classList.remove('open');}
@@ -592,8 +594,8 @@ document.getElementById('suggestAccept').addEventListener('click',function(){
     } else {
       /* next 타입: 추천 매치 정보로 합성 객체 구성 */
       var synthM=origM
-        ? {day:origM.day, time:sugg.time, venue:sugg.venue, court:sugg.court}
-        : {day:'', time:sugg.time, venue:sugg.venue, court:sugg.court};
+        ? {day:origM.day, time:sugg.time, venue:sugg.venue, court:sugg.court, fmt:origM.fmt, gender:origM.gender}
+        : {day:'', time:sugg.time, venue:sugg.venue, court:sugg.court, fmt:'', gender:''};
       openConfirm(synthM,false);
     }
   },300);
