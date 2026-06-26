@@ -589,7 +589,8 @@ function showSuggest(sugg,origM){
   document.getElementById('suggestDesc').textContent=descText;
   var cardFmt=(sugg.fmt||origM&&origM.fmt)||'';
   var cardGender=(sugg.gender||origM&&origM.gender)||'';
-  var origLine=origM?origM.day+' '+origM.time+' '+origM.venue+' '+origM.court:'';
+  function fmtDay(d){var p=d.split(' ');return p.length>=2?p[0]+'('+p[1].charAt(0)+') ':d+' ';}
+  var origLine=origM?fmtDay(origM.day)+origM.time+' '+origM.venue+' '+origM.court:'';
   document.getElementById('suggestCard').innerHTML=
     (origM?'<div class="sc-row"><span class="sc-lbl">내가 선택한 매치</span><span class="sc-val">'+origLine+'</span></div>':'')+
     '<div class="sc-row"><span class="sc-lbl sc-lbl-need">매니저가 필요한 매치</span><span class="sc-val">'+sugg.time+' '+sugg.venue+' '+sugg.court+'</span></div>';
