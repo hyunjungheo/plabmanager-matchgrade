@@ -881,11 +881,63 @@ function renderFixedCards(){
 
 var _prevView='list';
 
+function fixedScheduleDates(m){
+  var parts=m.day.match(/(\d+)월\s*(\d+)일/);
+  if(!parts)return[];
+  var mo=parseInt(parts[1])-1,dy=parseInt(parts[2]),yr=2026;
+  var start=new Date(yr,mo,dy);
+  var dn=['일요일','월요일','화요일','수요일','목요일','금요일','토요일'];
+  var today=new Date(2026,6,2);
+  var nextMo=today.getMonth()+1;
+  var res=[];
+  for(var i=0;i<6;i++){
+    var d=new Date(start.getTime()+i*7*24*60*60*1000);
+    res.push({mo:d.getMonth()+1,dy:d.getDate(),dn:dn[d.getDay()],red:d.getMonth()===nextMo});
+  }
+  return res;
+}
+function fixedDetailHTML(m){
+  var r=resolve(m);
+  var tb='';
+  if(m.laundry)tb+='<span class="bdg b-ld">런드리</span>';
+  var priceHTML='<div class="dprice">'+m.base.toLocaleString()+'원'+(m.price?' <span class="add">+ '+m.price.toLocaleString()+'원</span>':'')+' <span class="dur">/ '+m.dur+'</span></div>';
+  var s='';
+  if(r&&r.status==='likely') s+=likelySec(r.level);
+  // 배정 예상 일정
+  var dates=fixedScheduleDates(m);
+  var dateList=dates.map(function(d){
+    var style=d.red?' style="color:#E5392E;font-weight:600"':'';
+    return '<li'+style+'>'+d.mo+'월 '+d.dy+'일 '+d.dn+' '+m.time+'</li>';
+  }).join('');
+  var promoNote=m.price?'<p style="font-size:13px;color:#4A4F56;margin:10px 0 0">매주 '+m.price.toLocaleString()+'원의 프로모션이 적용돼요.</p>':'';
+  s+='<div class="sec"><div class="sechd"><span class="ci">'+
+    '<svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#2C6FF0"/></svg>'+
+    '</span><span class="ct">배정 예상 일정</span></div>'+
+    '<div class="secbody"><p style="font-size:13px;color:#4A4F56;margin:0 0 10px">지금 신청하면 아래 날짜에 배정이 예상돼요.</p>'+
+    promoNote+
+    '<ul style="margin:12px 0 0;padding-left:18px;font-size:14px;line-height:1.9;color:#26282E">'+dateList+'</ul></div></div>';
+  // 고정 매치 선택 주의사항
+  s+='<div class="sec"><div class="sechd"><span class="ci">'+
+    '<svg width="19" height="19" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#E5392E"/><path d="M12 7v6M12 16.5v.5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>'+
+    '</span><span class="ct">고정 매치 선택 주의사항</span></div>'+
+    '<div class="secbody"><ul><li>고정 매치를 신청하면 해당 일정에 매달 자동 배정됩니다</li><li>신청한 달의 고정매치는 취소가 불가능합니다.<br>진행이 어렵다면 양도 기능을 사용해 주세요</li><li>매달 1일~5일에 다음달 고정매치 취소 접수를 받습니다</li><li>구장 요청 및 운영 문제로 배정된 매치가 취소될 수 있습니다</li><li>참가자 미달로 매치 취소가 반복될 경우 고정 매치 시간이 변동될 수 있습니다</li></ul></div></div>';
+  s+=sec('pin','#16A07A','구장 특이사항','<div class="grp">&lt;참고 사항&gt;</div><ul><li>주차 : 참가자가 직접 카페 내부의 태블릿을 통해 주차 등록</li><li>흡연: 흡연부스 외 절대 금연</li><li>조명 : 자동 (점등 18시 / 소등 2시 30분) 조명이 들어와 있지 않을 경우 구장 옆 사무실에 문의</li></ul><div class="grp">&lt;구장 마무리 필수 사항&gt;</div><ul><li>담배 꽁초 및 쓰레기 확인하기</li></ul>');
+  return '<div class="dbar"><button data-back>'+svg('chevL',24,'#191A1C')+'</button><span class="dt">고정 매치 선택</span></div>'
+    +'<div class="hero">'+svg('pin',26,'#B6BCC3')+'</div>'
+    +'<div class="dhead">'
+      +'<p class="dtdate">'+m.day+' '+m.time+'</p>'
+      +'<div class="dtitle"><span class="nm">'+m.venue+'</span>'+tb+'</div>'
+      +'<div class="daddr">'+m.addr+'<span class="achip">'+svg('copy',13,'#4A4F56')+'복사</span><span class="achip">'+svg('map',13,'#4A4F56')+'지도</span></div>'
+      +'<p class="dline">'+m.gender+' · '+m.fmt+' · 모든레벨 · '+m.cap+'</p>'
+      +priceHTML+'</div>'
+    +s
+    +'<div class="dcta-bar"><button class="dcta">신청하기</button></div>';
+}
 function openDetailFromFixed(id){
   var m=fixedMatches.find(function(x){return x.id===id;});
   if(!m)return;
   _prevView='fixedList';
-  detV.innerHTML=detailHTML(m);
+  detV.innerHTML=fixedDetailHTML(m);
   flV.style.display='none';
   detV.style.display='block';
   detV.scrollTop=0;
