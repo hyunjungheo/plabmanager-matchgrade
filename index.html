@@ -97,33 +97,33 @@ body{background:var(--page);font-family:Pretendard,-apple-system,BlinkMacSystemF
 .ichip{width:21px;height:21px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;flex:none}
 
 /* ── 고정 매치 배너 ── */
-.fixed-banner{margin:10px 16px 6px;border-radius:14px;background:linear-gradient(135deg,#1A3F9E 0%,#2C6FF0 100%);padding:16px 18px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;overflow:hidden}
-.fixed-banner::before{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.08)}
-.fixed-banner::after{content:'';position:absolute;right:30px;bottom:-30px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.06)}
-.fb-text{flex:1;position:relative;z-index:1}
-.fb-title{font-size:15px;font-weight:800;color:#fff;margin:0 0 3px;letter-spacing:-.2px}
-.fb-sub{font-size:12px;color:rgba(255,255,255,.75);margin:0}
-.fb-icon{flex:none;position:relative;z-index:1;display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.18)}
-.fb-close{position:absolute;top:10px;right:12px;width:20px;height:20px;background:rgba(255,255,255,.2);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;padding:0}
+.fixed-banner{margin:10px 16px 6px;border-radius:14px;background:#16181D;padding:0 18px;cursor:pointer;display:flex;align-items:center;gap:12px;height:56px;position:relative;overflow:hidden}
+.fb-left{flex:none;display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.1)}
+.fb-text{flex:1;min-width:0}
+.fb-title{font-size:14px;font-weight:700;color:#fff;margin:0;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fb-icon{flex:none;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5)}
 /* ── 정기 접수 페이지 ── */
 #fixedListView{display:none;background:#F1F3F5}
-.fl-bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px;background:#fff;padding:13px 14px;border-bottom:1px solid var(--dv)}
-.fl-bar button{background:none;border:none;padding:0;display:flex;color:var(--text);cursor:pointer}
-.fl-bar .fl-t{font-size:17px;font-weight:700;flex:1;text-align:center;margin-right:24px}
-.fl-hero{background:linear-gradient(135deg,#1A3F9E 0%,#2C6FF0 100%);padding:24px 20px 28px;position:relative;overflow:hidden}
-.fl-hero::before{content:'';position:absolute;right:-30px;top:-30px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.07)}
-.fl-hero-title{font-size:20px;font-weight:800;color:#fff;margin:0 0 6px;letter-spacing:-.3px;position:relative;z-index:1}
-.fl-hero-sub{font-size:13px;color:rgba(255,255,255,.8);margin:0;position:relative;z-index:1;line-height:1.5}
-.fl-section{padding:18px 16px 8px}
-.fl-section-title{font-size:13px;font-weight:700;color:var(--sub);margin:0 0 10px;letter-spacing:.3px}
+.fl-bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px;background:#16181D;padding:13px 14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.fl-bar button{background:none;border:none;padding:0;display:flex;color:#fff;cursor:pointer}
+.fl-bar .fl-t{font-size:17px;font-weight:700;flex:1;text-align:center;margin-right:24px;color:#fff}
+.fl-filters{display:flex;gap:8px;overflow-x:auto;padding:14px 16px 10px;scrollbar-width:none;background:#fff;border-bottom:1px solid var(--bd)}
+.fl-filters::-webkit-scrollbar{display:none}
+.fl-chip{flex:none;display:inline-flex;align-items:center;border:1.5px solid var(--bd);border-radius:999px;padding:7px 14px;font-size:13.5px;font-weight:600;color:#3A3E44;background:#fff;cursor:pointer;white-space:nowrap}
+.fl-chip.on{border-color:var(--blue);color:var(--blue);background:#EEF4FF}
+.fl-list{padding:12px 16px 80px}
 .fl-card{background:#fff;border-radius:14px;border:1px solid var(--bd);padding:16px;margin-bottom:10px;cursor:pointer;transition:transform .05s}
 .fl-card:active{transform:scale(.99);background:#FAFBFC}
-.fl-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px}
-.fl-card-name{font-size:16px;font-weight:800;color:#191A1C;letter-spacing:-.2px}
-.fl-card-court{font-size:13px;color:var(--sub);margin-top:2px}
-.fl-card-badge{flex:none;display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;background:#E1EAFF;color:#1B5FD9}
-.fl-card-info{display:flex;flex-wrap:wrap;gap:6px}
-.fl-info-chip{display:inline-flex;align-items:center;gap:4px;background:#F7F8FA;border:1px solid #ECEEF0;border-radius:8px;padding:5px 10px;font-size:12.5px;font-weight:600;color:#4A4F56}
+.fl-card-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.fl-card-day{font-size:12px;font-weight:700;color:var(--sub);letter-spacing:.2px}
+.fl-card-slots{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;color:#E5392E;background:#FFF5F5;border:1px solid #FDECEC;border-radius:6px;padding:3px 8px}
+.fl-card-time{font-size:22px;font-weight:800;color:#191A1C;letter-spacing:-.5px;margin-bottom:2px}
+.fl-card-venue{font-size:15px;font-weight:700;color:#191A1C;margin-bottom:2px}
+.fl-card-court{font-size:13px;color:var(--sub);margin-bottom:12px}
+.fl-card-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.fl-tag{display:inline-flex;align-items:center;gap:4px;background:#F7F8FA;border:1px solid #ECEEF0;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:600;color:#4A4F56}
+.fl-tag.green{background:#E8F5EC;border-color:#C3E6CB;color:#1B7A3F}
+.fl-card-cta{display:block;width:100%;padding:13px;border:none;border-radius:11px;background:#191A1C;color:#fff;font-size:14.5px;font-weight:700;cursor:pointer;text-align:center}
 /* ── 고정 매치 상세 페이지 ── */
 #fixedDetailView{display:none;background:#F1F3F5}
 .fd-bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px;background:#fff;padding:13px 14px;border-bottom:1px solid var(--dv)}
@@ -245,26 +245,34 @@ td{color:#54585E} td.v{font-weight:600;color:#191A1C}
     </div>
     <div class="lblguide" id="openLblModal">매치 상태 표시 안내 <span style="display:flex" data-icon="info" data-sz="15" data-color="#A0A6AC"></span></div>
     <div class="fixed-banner" id="fixedBanner">
+      <div class="fb-left">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="9" stroke="#fff" stroke-width="1.8"/>
+          <path d="M12 3C12 3 9 7 9 12C9 17 12 21 12 21" stroke="#fff" stroke-width="1.4"/>
+          <path d="M12 3C12 3 15 7 15 12C15 17 12 21 12 21" stroke="#fff" stroke-width="1.4"/>
+          <path d="M3 12H21" stroke="#fff" stroke-width="1.4"/>
+          <path d="M4 8H20M4 16H20" stroke="#fff" stroke-width="1.2" stroke-dasharray="2 2"/>
+        </svg>
+      </div>
       <div class="fb-text">
         <p class="fb-title">고정 매치 정기 접수가 시작되었어요</p>
-        <p class="fb-sub">매주 같은 요일·시간 매치에 배정돼요</p>
       </div>
-      <div class="fb-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6l-6 6"/></svg></div>
+      <div class="fb-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6l-6 6"/></svg></div>
     </div>
     <div id="listBody"></div>
     <div class="promo"><span class="tk" data-icon="ticket" data-sz="20"></span><span class="pt">5매치 이상 진행하고 플랩 이용권 받아요</span><span class="cv" data-icon="chevU" data-sz="18" data-color="#A0A6AC"></span></div>
   </div>
   <div id="detailView" class="scroll"></div>
   <div id="fixedListView" class="scroll">
-    <div class="fl-bar"><button id="fixedListBack"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#191A1C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg></button><span class="fl-t">정기 접수</span></div>
-    <div class="fl-hero">
-      <p class="fl-hero-title">고정 매치 정기 접수</p>
-      <p class="fl-hero-sub">매주 같은 요일·시간 매치에 배정돼요.<br>취소 신청 전까지 자동으로 연장돼요.</p>
+    <div class="fl-bar"><button id="fixedListBack"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg></button><span class="fl-t">정기 접수</span></div>
+    <div class="fl-filters" id="flFilters">
+      <span class="fl-chip on" data-day="all">접수가능</span>
+      <span class="fl-chip" data-day="목요일">목요일</span>
+      <span class="fl-chip" data-day="금요일">금요일</span>
+      <span class="fl-chip" data-day="일요일">일요일</span>
+      <span class="fl-chip" data-day="전체">전체</span>
     </div>
-    <div class="fl-section">
-      <p class="fl-section-title">접수 가능한 고정 매치</p>
-      <div id="fixedListBody"></div>
-    </div>
+    <div class="fl-list" id="fixedListBody"></div>
   </div>
   <div id="fixedDetailView" class="scroll">
     <div class="fd-bar"><button id="fixedDetailBack"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#191A1C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg></button><span class="fd-t">고정 매치 상세</span></div>
@@ -822,24 +830,53 @@ var fixedMatches=[
 var flV=document.getElementById('fixedListView');
 var fdV=document.getElementById('fixedDetailView');
 
-function openFixedList(){
-  listV.style.display='none';
-  var html=fixedMatches.map(function(m){
+function renderFixedCards(filter){
+  var list=filter==='전체'?fixedMatches:filter==='all'?fixedMatches:fixedMatches.filter(function(m){return m.day===filter;});
+  var html=list.map(function(m){
     return '<div class="fl-card" data-fid="'+m.id+'">'
-      +'<div class="fl-card-top"><div><div class="fl-card-name">'+m.venue+'</div><div class="fl-card-court">'+m.court+'</div></div><span class="fl-card-badge">모집 중</span></div>'
-      +'<div class="fl-card-info">'
-        +'<span class="fl-info-chip"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 9h16M8 3v4M16 3v4"/></svg> 매주 '+m.day+'</span>'
-        +'<span class="fl-info-chip"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> '+m.time+'</span>'
-        +'<span class="fl-info-chip">'+m.fmt+' · '+m.gender+'</span>'
-        +'<span class="fl-info-chip" style="color:#E5392E;border-color:#FDECEC;background:#FFF5F5">잔여 '+m.slots+'자리</span>'
+      +'<div class="fl-card-head">'
+        +'<span class="fl-card-day">매주 '+m.day+'</span>'
+        +'<span class="fl-card-slots">'
+          +'<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>'
+          +' 잔여 '+m.slots+'자리'
+        +'</span>'
       +'</div>'
+      +'<div class="fl-card-time">'+m.time+'</div>'
+      +'<div class="fl-card-venue">'+m.venue+'</div>'
+      +'<div class="fl-card-court">'+m.court+'</div>'
+      +'<div class="fl-card-tags">'
+        +'<span class="fl-tag">'
+          +'<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>'
+          +' '+m.dur
+        +'</span>'
+        +'<span class="fl-tag">'+m.fmt+'</span>'
+        +'<span class="fl-tag">'+m.gender+'</span>'
+        +'<span class="fl-tag green">'
+          +'<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12M12 12C12 7 7 4 3 5c0 5 3 9 9 7M12 12C12 7 17 4 21 5c0 5-3 9-9 7"/></svg>'
+          +' '+m.base.toLocaleString()+'원'
+        +'</span>'
+      +'</div>'
+      +'<button class="fl-card-cta" data-fid="'+m.id+'" onclick="event.stopPropagation();openFixedDetail('+m.id+')">신청하기</button>'
     +'</div>';
   }).join('');
-  document.getElementById('fixedListBody').innerHTML=html;
+  document.getElementById('fixedListBody').innerHTML=html||'<div style="padding:40px 16px;color:var(--mute);font-size:14px;text-align:center">해당 요일 접수 가능한 매치가 없어요.</div>';
+  flV.querySelectorAll('.fl-card').forEach(function(el){
+    el.addEventListener('click',function(e){if(!e.target.closest('.fl-card-cta'))openFixedDetail(+el.dataset.fid);});
+  });
+}
+
+function openFixedList(){
+  listV.style.display='none';
+  renderFixedCards('all');
   flV.style.display='block';
   flV.scrollTop=0;
-  flV.querySelectorAll('.fl-card').forEach(function(el){
-    el.addEventListener('click',function(){openFixedDetail(+el.dataset.fid);});
+  /* 필터 칩 */
+  document.getElementById('flFilters').querySelectorAll('.fl-chip').forEach(function(chip){
+    chip.addEventListener('click',function(){
+      document.querySelectorAll('#flFilters .fl-chip').forEach(function(c){c.classList.remove('on');});
+      chip.classList.add('on');
+      renderFixedCards(chip.dataset.day);
+    });
   });
 }
 function closeFixedList(){flV.style.display='none';listV.style.display='block';}
